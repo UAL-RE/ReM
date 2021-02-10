@@ -8,7 +8,15 @@ api_version = 'v1'
 app = FastAPI()
 
 
-def figshare_metadata_readme(figshare_dict: dict):
+def figshare_metadata_readme(figshare_dict: dict) -> dict:
+    """
+    Function to provide shortened dict for README metadata
+
+    :param figshare_dict: Figshare API response
+
+    :return: README metadata based on Figshare response
+    """
+
     readme_dict = {
         'title': figshare_dict['title'],
         'description': figshare_dict['description'],
@@ -18,14 +26,15 @@ def figshare_metadata_readme(figshare_dict: dict):
 
 
 @app.get(f'/api/{api_version}/figshare/'+'{article_id}')
-def figshare_get(article_id: int, stage: bool = False):
+def figshare_get(article_id: int, stage: bool = False) -> dict:
     """
-    Retrieve Figshare metadata
+    API call to retrieve Figshare metadata
 
     :param article_id: Figshare article ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
-    :return response: dict
+
+    :return: Figshare API response
     """
 
     if not stage:
@@ -40,7 +49,16 @@ def figshare_get(article_id: int, stage: bool = False):
 
 
 @app.get(f'/api/{api_version}/metadata/'+'{article_id}')
-async def metadata_get(article_id: int, stage: bool = False):
+async def metadata_get(article_id: int, stage: bool = False) -> dict:
+    """
+    API call for README metadata based on Figshare response
+
+    :param article_id: Figshare article ID
+    :param stage: Figshare stage or production API.
+                  Stage is available for Figshare institutions
+
+    :return: README metadata API response
+    """
     response = figshare_get(article_id, stage=stage)
     readme_dict = figshare_metadata_readme(response)
     return readme_dict
