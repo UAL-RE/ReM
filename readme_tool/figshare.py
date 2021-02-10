@@ -3,6 +3,8 @@ import requests
 from fastapi import FastAPI
 # from pydantic import BaseModel
 
+api_version = 'v1'
+
 app = FastAPI()
 
 
@@ -15,7 +17,7 @@ def figshare_metadata_readme(figshare_dict: dict):
     return readme_dict
 
 
-@app.get('/figshare/{article_id}')
+@app.get(f'/api/{api_version}/figshare/'+'{article_id}')
 def figshare_get(article_id: int, stage: bool = False):
     """
     Retrieve Figshare metadata
@@ -37,7 +39,7 @@ def figshare_get(article_id: int, stage: bool = False):
     return response.json()
 
 
-@app.get('/metadata/{article_id}')
+@app.get(f'/api/{api_version}/metadata/'+'{article_id}')
 async def metadata_get(article_id: int, stage: bool = False):
     response = figshare_get(article_id, stage=stage)
     readme_dict = figshare_metadata_readme(response)
