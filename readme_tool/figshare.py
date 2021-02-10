@@ -16,11 +16,21 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
     :return: README metadata based on Figshare response
     """
+    single_str_citation = figshare_dict['citation']
+
+    # Handle period in author list.  Assume no period in dataset title
+    author_list = ([single_str_citation.split('):')[0] + ').'])
+    author_list += [str_row + '.' for str_row in single_str_citation.split('): ')[1].split('. ')]
 
     readme_dict = {
+        'article_id': figshare_dict['id'],
         'title': figshare_dict['title'],
         'description': figshare_dict['description'],
-        'doi': figshare_dict['doi']
+        'doi': f"https://doi.org/{figshare_dict['doi']}",
+        'preferred_citation': author_list,
+        'license': figshare_dict['license'],
+        'summary': figshare_dict['description'],
+        'references': figshare_dict['references'],
     }
     return readme_dict
 
