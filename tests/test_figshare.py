@@ -15,11 +15,21 @@ def test_figshare_get():
     assert isinstance(response.json(), dict)
     assert response.json()['id'] == article_id
 
+    # Check for incorrect entry
+    response = client.get(f'/api/{api_version}/figshare/{stage_article_id}')
+    assert response.status_code == 200
+    assert response.json()['code'] == "EntityNotFound"
+
     # Stage
     response = client.get(f'/api/{api_version}/figshare/{stage_article_id}?stage=True')
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['id'] == stage_article_id
+
+    # Check for incorrect entry
+    response = client.get(f'/api/{api_version}/figshare/{article_id}?stage=True')
+    assert response.status_code == 200
+    assert response.json()['code'] == "EntityNotFound"
 
 
 def test_metadata_get():
