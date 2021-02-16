@@ -11,60 +11,68 @@ value_400 = [-1, 0]
 
 
 def test_figshare_get():
+    def _client_get(article_id0, stage=False):
+        return client.get(f'/api/{api_version}/figshare/'
+                          f'{article_id0}?stage={stage}')
+
     # Production
-    response = client.get(f'/api/{api_version}/figshare/{article_id}')
+    response = _client_get(article_id)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['id'] == article_id
 
     # Check for incorrect entry
-    response = client.get(f'/api/{api_version}/figshare/{stage_article_id}')
+    response = _client_get(stage_article_id)
     assert response.status_code == 404
 
     for i in value_400:
-        response = client.get(f'/api/{api_version}/figshare/{i}')
+        response = _client_get(i)
         assert response.status_code == 400
 
     # Stage
-    response = client.get(f'/api/{api_version}/figshare/{stage_article_id}?stage=True')
+    response = _client_get(stage_article_id, stage=True)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['id'] == stage_article_id
 
     # Check for incorrect entry
-    response = client.get(f'/api/{api_version}/figshare/{article_id}?stage=True')
+    response = _client_get(article_id, stage=True)
     assert response.status_code == 404
 
     for i in value_400:
-        response = client.get(f'/api/{api_version}/figshare/{i}?stage=True')
+        response = _client_get(i, stage=True)
         assert response.status_code == 400
 
 
 def test_metadata_get():
+    def _client_get(article_id0, stage=False):
+        return client.get(f'/api/{api_version}/metadata/'
+                          f'{article_id0}?stage={stage}')
+
     # Production
-    response = client.get(f'/api/{api_version}/metadata/{article_id}')
+    response = _client_get(article_id)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == article_id
 
     # Check for incorrect entry
-    response = client.get(f'/api/{api_version}/metadata/{stage_article_id}')
+    response = _client_get(stage_article_id)
     assert response.status_code == 404
 
     for i in value_400:
-        response = client.get(f'/api/{api_version}/metadata/{i}')
+        response = _client_get(i)
         assert response.status_code == 400
 
     # Stage
-    response = client.get(f'/api/{api_version}/metadata/{stage_article_id}?stage=True')
+    response = _client_get(stage_article_id, stage=True)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == stage_article_id
 
     # Check for incorrect entry
-    response = client.get(f'/api/{api_version}/metadata/{article_id}?stage=True')
+    response = _client_get(article_id, stage=True)
     assert response.status_code == 404
 
     for i in value_400:
-        response = client.get(f'/api/{api_version}/metadata/{i}?stage=True')
+        response = _client_get(i, stage=True)
         assert response.status_code == 400
