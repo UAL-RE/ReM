@@ -17,8 +17,7 @@ def test_figshare_get():
 
     # Check for incorrect entry
     response = client.get(f'/api/{api_version}/figshare/{stage_article_id}')
-    assert response.status_code == 200
-    assert response.json()['code'] == "EntityNotFound"
+    assert response.status_code == 404
 
     # Stage
     response = client.get(f'/api/{api_version}/figshare/{stage_article_id}?stage=True')
@@ -28,8 +27,7 @@ def test_figshare_get():
 
     # Check for incorrect entry
     response = client.get(f'/api/{api_version}/figshare/{article_id}?stage=True')
-    assert response.status_code == 200
-    assert response.json()['code'] == "EntityNotFound"
+    assert response.status_code == 404
 
 
 def test_metadata_get():
@@ -39,8 +37,16 @@ def test_metadata_get():
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == article_id
 
+    # Check for incorrect entry
+    response = client.get(f'/api/{api_version}/metadata/{stage_article_id}')
+    assert response.status_code == 404
+
     # Stage
     response = client.get(f'/api/{api_version}/metadata/{stage_article_id}?stage=True')
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == stage_article_id
+
+    # Check for incorrect entry
+    response = client.get(f'/api/{api_version}/metadata/{article_id}?stage=True')
+    assert response.status_code == 404

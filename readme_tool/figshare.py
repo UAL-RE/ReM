@@ -1,6 +1,7 @@
+from typing import Union
 import requests
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 # from pydantic import BaseModel
 
 api_version = 'v1'
@@ -36,7 +37,7 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
 
 @app.get(f'/api/{api_version}/figshare/'+'{article_id}')
-def figshare_get(article_id: int, stage: bool = False) -> dict:
+def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPException]:
     """
     API call to retrieve Figshare metadata
 
@@ -55,7 +56,13 @@ def figshare_get(article_id: int, stage: bool = False) -> dict:
     url = f"{base_url}/v2/articles/{article_id}"
 
     response = requests.get(url)
-    return response.json()
+    if response.status_code != 200:
+        raise HTTPException(
+            status_code=response.status_code,
+            detail=response.json(),
+        )
+    else:
+        return response.json()
 
 
 @app.get(f'/api/{api_version}/metadata/'+'{article_id}')
@@ -69,6 +76,10 @@ async def metadata_get(article_id: int, stage: bool = False) -> dict:
 
     :return: README metadata API response
     """
-    response = figshare_get(article_id, stage=stage)
-    readme_dict = figshare_metadata_readme(response)
-    return readme_dict
+
+    try:
+        figshare_dict = figshare_get(article_id, stage=stage)
+        readme_dict = figshare_metadata_readme(figshare_dict)
+        return readme_dict
+    except HTTPException as e:
+        raise e
