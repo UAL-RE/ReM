@@ -41,6 +41,7 @@ def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPExcept
     """
     API call to retrieve Figshare metadata
 
+    \f
     :param article_id: Figshare article ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
@@ -70,6 +71,7 @@ async def metadata_get(article_id: int, stage: bool = False) -> dict:
     """
     API call for README metadata based on Figshare response
 
+    \f
     :param article_id: Figshare article ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
