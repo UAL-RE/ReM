@@ -7,6 +7,8 @@ client = TestClient(app)
 article_id = 12966581
 stage_article_id = 6941778
 
+value_400 = [-1, 0]
+
 
 def test_figshare_get():
     # Production
@@ -19,6 +21,10 @@ def test_figshare_get():
     response = client.get(f'/api/{api_version}/figshare/{stage_article_id}')
     assert response.status_code == 404
 
+    for i in value_400:
+        response = client.get(f'/api/{api_version}/figshare/{i}')
+        assert response.status_code == 400
+
     # Stage
     response = client.get(f'/api/{api_version}/figshare/{stage_article_id}?stage=True')
     assert response.status_code == 200
@@ -28,6 +34,10 @@ def test_figshare_get():
     # Check for incorrect entry
     response = client.get(f'/api/{api_version}/figshare/{article_id}?stage=True')
     assert response.status_code == 404
+
+    for i in value_400:
+        response = client.get(f'/api/{api_version}/figshare/{i}?stage=True')
+        assert response.status_code == 400
 
 
 def test_metadata_get():
@@ -41,6 +51,10 @@ def test_metadata_get():
     response = client.get(f'/api/{api_version}/metadata/{stage_article_id}')
     assert response.status_code == 404
 
+    for i in value_400:
+        response = client.get(f'/api/{api_version}/metadata/{i}')
+        assert response.status_code == 400
+
     # Stage
     response = client.get(f'/api/{api_version}/metadata/{stage_article_id}?stage=True')
     assert response.status_code == 200
@@ -50,3 +64,7 @@ def test_metadata_get():
     # Check for incorrect entry
     response = client.get(f'/api/{api_version}/metadata/{article_id}?stage=True')
     assert response.status_code == 404
+
+    for i in value_400:
+        response = client.get(f'/api/{api_version}/metadata/{i}?stage=True')
+        assert response.status_code == 400
