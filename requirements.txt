@@ -3,3 +3,5 @@ requests==2.25.1
 pydantic==1.7.3
 starlette==0.13.6
 uvicorn==0.13.3
+python-multipart==0.0.5
+jinja2==2.11.3
