@@ -1,3 +1,4 @@
+from typing import Union
 from fastapi.testclient import TestClient
 
 from readme_tool.figshare import app, api_version
@@ -11,7 +12,7 @@ value_400 = [-1, 0]
 
 
 def test_figshare_get():
-    def _client_get(article_id0, stage=False):
+    def _client_get(article_id0: Union[int, str] = '', stage=False):
         return client.get(f'/api/{api_version}/figshare/'
                           f'{article_id0}?stage={stage}')
 
@@ -29,6 +30,9 @@ def test_figshare_get():
         response = _client_get(i)
         assert response.status_code == 400
 
+    response = _client_get()
+    assert response.status_code == 404
+
     # Stage
     response = _client_get(stage_article_id, stage=True)
     assert response.status_code == 200
@@ -43,9 +47,12 @@ def test_figshare_get():
         response = _client_get(i, stage=True)
         assert response.status_code == 400
 
+    response = _client_get(stage=True)
+    assert response.status_code == 404
+
 
 def test_metadata_get():
-    def _client_get(article_id0, stage=False):
+    def _client_get(article_id0: Union[int, str] = '', stage=False):
         return client.get(f'/api/{api_version}/metadata/'
                           f'{article_id0}?stage={stage}')
 
@@ -63,6 +70,9 @@ def test_metadata_get():
         response = _client_get(i)
         assert response.status_code == 400
 
+    response = _client_get()
+    assert response.status_code == 404
+
     # Stage
     response = _client_get(stage_article_id, stage=True)
     assert response.status_code == 200
@@ -76,3 +86,6 @@ def test_metadata_get():
     for i in value_400:
         response = _client_get(i, stage=True)
         assert response.status_code == 400
+
+    response = _client_get(stage=True)
+    assert response.status_code == 404
