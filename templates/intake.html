@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UA Research Data Repository README Form</title>
+</head>
+
+<body>
+<h1>UA Research Data Repository README Form</h1>
+
+<p>This form is used to obtain specific information about your dataset so we
+can create a README.txt file.  The README.txt file will be included in your
+deposit; it enables those who retrieve your data to understand and be able
+to re-use the data.<br><br>
+
+The README.txt file will automatically contain many of the information that
+you provided when you uploaded your dataset.  This prevents errors and makes
+it easier for you to focus on custom content.<br><br>
+
+The flow of content is in the order as it will appear in the README.txt file.
+Please leave a field empty if you feel that a section is correct as-is or is
+not needed.
+</p>
+<h2>1. Title of Your Deposit</h2>
+<p style="font-size:18px;">{{ fs.title }}<br>
+
+----- <br>
+Note: This information was retrieved from the information in your upload. If you need to
+    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+</p>
+
+<h2>2. Preferred Citation</h2>
+<p style="font-size:18px;">
+{% for cite_text in fs.preferred_citation %}
+  {{ cite_text }}<br>
+{% endfor %}
+
+----- <br>
+Note: This is the ReDATA citation for your upload<br><br>
+If you have a preferred citation (e.g., journal publication) that you wish to use, please<br>
+provide it below following the <b>DataCite format</b>
+</p>
+
+<h2>3. License</h2>
+<p style="font-size:18px;">{{ fs.license.name }}<br>
+
+----- <br>
+Note: This information was retrieved from the information in your upload. If you need to
+    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+</p>
+
+<h2>4. Digital Object Identifier (DOI)</h2>
+<p style="font-size:18px;">{{ fs.doi }}<br>
+
+----- <br>
+Note: This information was retrieved from the information in your upload. If you need to
+    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+</p>
+
+<h2>5. Summary (OPTIONAL):</h2>
+
+{{ fs.summary | safe}}
+<p>
+<br>
+
+    ----- <br>
+    Note: This information was retrieved from the information in your upload under the
+    Description field. If you need to change it, please do so within ReDATA<br><br>
+    If you wish to append additional information to your summary, please use the text box below.
+    The additional information will only appear in your README.txt file
+</p>
+
+<form method="post">
+    <textarea id="summary" name="summary" value="" rows="10" cols="75"></textarea>
+</form>
+
+<h2>
+    6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)
+</h2>
+<p>
+    Please describe the files included in your deposit.
+    Below is the suggested format and examples are shown:<br><br>
+
+    #### Folder_1_Name.zip: Description of contents
+    - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
+    - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
+
+    (Repeat as needed)<br>
+</p>
+
+<form method="post">
+    <textarea id="files" name="files" value="" rows="10" cols="75"></textarea>
+</form>
+
+<p>Result: {{ result.summary }}</p>
+
+<p>Result: {{ result.files }}</p>
+
+
+<form method="post">
+    <input type="submit">
+</form>
+
+</body>
+</html>
