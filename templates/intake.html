@@ -71,7 +71,7 @@ Note: This information was retrieved from the information in your upload. If you
 </p>
 
 <form method="post">
-    <textarea id="summary" name="summary" value="" rows="10" cols="75"></textarea>
+    <textarea id="summary" name="summary" rows="10" cols="75" form="usrform"></textarea>
 </form>
 
 <h2>
@@ -89,7 +89,7 @@ Note: This information was retrieved from the information in your upload. If you
 </p>
 
 <form method="post">
-    <textarea id="files" name="files" value="" rows="10" cols="75"></textarea>
+    <textarea id="files" name="files" rows="10" cols="75" form="usrform"></textarea>
 </form>
 
 <p>Result: {{ result.summary }}</p>
@@ -97,7 +97,7 @@ Note: This information was retrieved from the information in your upload. If you
 <p>Result: {{ result.files }}</p>
 
 
-<form method="post">
+<form method="post" id="usrform">
     <input type="submit">
 </form>
 
