@@ -44,11 +44,11 @@ async def get_data(article_id: int) -> dict:
 async def read_form(article_id: int, request: Request, stage: bool = False):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
 
-    '''try:
+    try:
         submit_dict = await get_data(article_id)
     except HTTPException:
         submit_dict = {'summary': '', 'files': ''}
-    print(submit_dict)'''
+    print(submit_dict)
 
     result = {'summary': 'Provide additional summary info',
               'files': 'Provide your files'}
@@ -56,6 +56,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False):
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
                                                'result': result,
+                                               'submit_dict': submit_dict,
                                                'fs': fs_metadata})
 
 
@@ -64,6 +65,11 @@ async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
                       stage: bool = False):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+
+    try:
+        submit_dict = await get_data(article_id)
+    except HTTPException:
+        submit_dict = {'summary': '', 'files': ''}
 
     result = {'summary': summary,
               'files': files}
@@ -75,6 +81,7 @@ async def intake_post(article_id: int, request: Request,
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
                                                'result': result,
+                                               'submit_dict': submit_dict,
                                                'fs': fs_metadata,
                                                }
                                       )

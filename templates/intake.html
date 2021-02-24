@@ -71,7 +71,7 @@ Note: This information was retrieved from the information in your upload. If you
 </p>
 
 <form method="post">
-    <textarea id="summary" name="summary" rows="10" cols="75" form="usrform"></textarea>
+    <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
 </form>
 
 <h2>
@@ -89,7 +89,7 @@ Note: This information was retrieved from the information in your upload. If you
 </p>
 
 <form method="post">
-    <textarea id="files" name="files" rows="10" cols="75" form="usrform"></textarea>
+    <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
 </form>
 
 <p>Result: {{ result.summary }}</p>
