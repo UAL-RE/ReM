@@ -64,7 +64,7 @@ async def intake_post(article_id: int, request: Request,
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
-    db.append(IntakeData(**post_data))
+    db.append(post_data)  # IntakeData(**post_data))
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
