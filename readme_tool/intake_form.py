@@ -17,7 +17,7 @@ class IntakeData(BaseModel):
 
 
 @app.get('/')
-async def hello_world():
+async def hello_world() -> str:
     return 'hello world'
 
 
@@ -43,6 +43,12 @@ async def get_data(article_id: int) -> dict:
 @app.get('/api/v1/intake/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+
+    '''try:
+        submit_dict = await get_data(article_id)
+    except HTTPException:
+        submit_dict = {'summary': '', 'files': ''}
+    print(submit_dict)'''
 
     result = {'summary': 'Provide additional summary info',
               'files': 'Provide your files'}
