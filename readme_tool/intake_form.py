@@ -30,7 +30,7 @@ async def get_db() -> list:
 async def get_data(article_id: int) -> dict:
     db0 = await get_db()
 
-    match = [d for d in db0 if d['article_id'] == article_id]
+    match = [d for d in db0 if d.dict()['article_id'] == article_id]
     if len(match) == 0:
         raise HTTPException(
             status_code=404,
@@ -76,7 +76,7 @@ async def intake_post(article_id: int, request: Request,
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
-    db.append(post_data)  # IntakeData(**post_data))
+    db.append(IntakeData(**post_data))
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
