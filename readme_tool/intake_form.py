@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
+
 from pydantic import BaseModel
+from typing import Union
 
 from . import figshare
 
@@ -27,17 +29,22 @@ async def get_db() -> list:
 
 
 @app.get('/api/v1/intake/database/{article_id}')
-async def get_data(article_id: int) -> dict:
+async def get_data(article_id: int, index: bool = False) -> Union[dict, int]:
     db0 = await get_db()
 
-    match = [d for d in db0 if d.dict()['article_id'] == article_id]
-    if len(match) == 0:
+    match_idx = [i for i in range(len(db0)) if db0[i].dict()['article_id'] == article_id]
+    if len(match_idx) == 0:
         raise HTTPException(
             status_code=404,
             detail="Record not found",
         )
+    else:
+        match = [db0[i] for i in match_idx]
 
-    return match[0]
+    if not index:
+        return match[0]
+    else:
+        return match_idx[0]
 
 
 @app.get('/api/v1/intake/{article_id}')
@@ -66,22 +73,28 @@ async def intake_post(article_id: int, request: Request,
                       stage: bool = False):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
 
+    '''
     try:
         submit_dict = await get_data(article_id)
     except HTTPException:
         submit_dict = {'summary': '', 'files': ''}
+    '''
 
     result = {'summary': summary,
               'files': files}
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
-    db.append(IntakeData(**post_data))
+    try:
+        match_index = await get_data(article_id, index=True)
+        db[match_index] = IntakeData(**post_data)
+    except HTTPException:
+        db.append(IntakeData(**post_data))
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
                                                'result': result,
-                                               'submit_dict': submit_dict,
+                                               'submit_dict': result,
                                                'fs': fs_metadata,
                                                }
                                       )
