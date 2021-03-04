@@ -5,3 +5,4 @@ starlette==0.13.6
 uvicorn==0.13.3
 python-multipart==0.0.5
 jinja2==2.11.3
+tinydb==4.4.0
