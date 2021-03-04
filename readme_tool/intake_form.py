@@ -4,12 +4,14 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Union
 
+from tinydb import TinyDB, Query
+
 from . import figshare
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates/')
 
-db = []
+q = Query()
 
 
 class IntakeData(BaseModel):
@@ -24,7 +26,8 @@ async def hello_world() -> str:
 
 
 @app.get('/api/v1/intake/database/')
-async def get_db() -> list:
+async def get_db(db_file: str = 'intake.json') -> TinyDB:
+    db = TinyDB(db_file)
     return db
 
 
@@ -32,19 +35,30 @@ async def get_db() -> list:
 async def get_data(article_id: int, index: bool = False) -> Union[dict, int]:
     db0 = await get_db()
 
-    match_idx = [i for i in range(len(db0)) if db0[i].dict()['article_id'] == article_id]
-    if len(match_idx) == 0:
+    article_query = q['article_id'] == article_id
+    match = db0.search(article_query)
+    if len(match) == 0:
         raise HTTPException(
             status_code=404,
             detail="Record not found",
         )
-    else:
-        match = [db0[i] for i in match_idx]
 
     if not index:
         return match[0]
     else:
-        return match_idx[0]
+        return db0.get(article_query).doc_id
+
+
+@app.post('/api/v1/intake/database/add')
+async def add_data(response: IntakeData):
+    db0 = await get_db()
+    db0.insert(response.dict())
+
+
+@app.post('/api/v1/intake/database/update/{doc_id}')
+async def update_data(doc_id: int, response: IntakeData):
+    db0 = await get_db()
+    db0.update(response.dict(), doc_ids=[doc_id])
 
 
 @app.get('/api/v1/intake/{article_id}')
@@ -86,10 +100,10 @@ async def intake_post(article_id: int, request: Request,
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
     try:
-        match_index = await get_data(article_id, index=True)
-        db[match_index] = IntakeData(**post_data)
+        doc_id = await get_data(article_id, index=True)
+        await update_data(doc_id, IntakeData(**post_data))
     except HTTPException:
-        db.append(IntakeData(**post_data))
+        await add_data(IntakeData(**post_data))
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
