@@ -32,8 +32,9 @@ async def get_db(db_file: str = 'intake.json') -> TinyDB:
 
 
 @app.get('/api/v1/intake/database/{article_id}')
-async def get_data(article_id: int, index: bool = False) -> Union[dict, int]:
-    db0 = await get_db()
+async def get_data(article_id: int, index: bool = False,
+                   db_file: str = 'intake.json') -> Union[dict, int]:
+    db0 = await get_db(db_file)
 
     article_query = q['article_id'] == article_id
     match = db0.search(article_query)
@@ -50,14 +51,15 @@ async def get_data(article_id: int, index: bool = False) -> Union[dict, int]:
 
 
 @app.post('/api/v1/intake/database/add')
-async def add_data(response: IntakeData):
-    db0 = await get_db()
+async def add_data(response: IntakeData, db_file: str = 'intake.json'):
+    db0 = await get_db(db_file)
     db0.insert(response.dict())
 
 
 @app.post('/api/v1/intake/database/update/{doc_id}')
-async def update_data(doc_id: int, response: IntakeData):
-    db0 = await get_db()
+async def update_data(doc_id: int, response: IntakeData,
+                      db_file: str = 'intake.json'):
+    db0 = await get_db(db_file)
     db0.update(response.dict(), doc_ids=[doc_id])
 
 
