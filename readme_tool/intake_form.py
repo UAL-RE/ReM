@@ -34,8 +34,9 @@ async def get_db(db_file: str = 'intake.json') -> TinyDB:
 @app.get('/api/v1/intake/database/{article_id}')
 async def get_data(article_id: int, index: bool = False,
                    db_file: str = 'intake.json') -> Union[dict, int]:
-    db0 = await get_db(db_file)
-
+    print(db_file)
+    db0 = await get_db(db_file=db_file)
+    print(db0)
     article_query = q['article_id'] == article_id
     match = db0.search(article_query)
     if len(match) == 0:
@@ -61,17 +62,18 @@ async def update_data(doc_id: int, response: IntakeData,
                       db_file: str = 'intake.json'):
     db0 = await get_db(db_file)
     db0.update(response.dict(), doc_ids=[doc_id])
+    return db0
 
 
 @app.get('/api/v1/intake/{article_id}')
-async def read_form(article_id: int, request: Request, stage: bool = False):
+async def read_form(article_id: int, request: Request, stage: bool = False,
+                    db_file: str = 'intake.json'):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
 
     try:
-        submit_dict = await get_data(article_id)
+        submit_dict = await get_data(article_id, db_file=db_file)
     except HTTPException:
         submit_dict = {'summary': '', 'files': ''}
-    print(submit_dict)
 
     result = {'summary': 'Provide additional summary info',
               'files': 'Provide your files'}
