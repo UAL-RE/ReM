@@ -34,9 +34,7 @@ async def get_db(db_file: str = 'intake.json') -> TinyDB:
 @app.get('/api/v1/intake/database/{article_id}')
 async def get_data(article_id: int, index: bool = False,
                    db_file: str = 'intake.json') -> Union[dict, int]:
-    print(db_file)
     db0 = await get_db(db_file=db_file)
-    print(db0)
     article_query = q['article_id'] == article_id
     match = db0.search(article_query)
     if len(match) == 0:
@@ -88,26 +86,19 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 @app.post('/api/v1/intake/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
-                      stage: bool = False):
+                      stage: bool = False,
+                      db_file: str = 'intake.json'):
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
-
-    '''
-    try:
-        submit_dict = await get_data(article_id)
-    except HTTPException:
-        submit_dict = {'summary': '', 'files': ''}
-    '''
-
     result = {'summary': summary,
               'files': files}
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
     try:
-        doc_id = await get_data(article_id, index=True)
-        await update_data(doc_id, IntakeData(**post_data))
+        doc_id = await get_data(article_id, index=True, db_file=db_file)
+        await update_data(doc_id, IntakeData(**post_data), db_file=db_file)
     except HTTPException:
-        await add_data(IntakeData(**post_data))
+        await add_data(IntakeData(**post_data), db_file=db_file)
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
