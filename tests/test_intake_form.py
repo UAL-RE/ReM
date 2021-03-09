@@ -2,7 +2,7 @@ from shutil import copy
 import ast
 from fastapi.testclient import TestClient
 
-from readme_tool.intake_form import app
+from readme_tool.intake_form import app, VersionModel
 
 client = TestClient(app)
 
@@ -16,6 +16,15 @@ value_400 = [-1, 0]
 test_file = 'tests_data/tinydb.json'
 test_dup_file = 'tests_data/tinydb_dup.json'  # This is a copy for editing. Won't save
 copy(test_file, test_dup_file)
+
+
+def test_get_version():
+    response = client.get(f'/version/')
+    assert response.status_code == 200
+    json_content = response.json()
+    assert isinstance(json_content, dict)
+    for key in VersionModel().dict():
+        assert isinstance(json_content[key], str)
 
 
 def test_get_db():

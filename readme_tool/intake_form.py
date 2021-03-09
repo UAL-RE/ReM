@@ -6,12 +6,15 @@ from typing import Union
 
 from tinydb import TinyDB, Query
 
+from . import __version__ as rem_version
 from . import figshare
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates/')
 
 q = Query()
+
+api_version = "v1.0.0"
 
 
 class IntakeData(BaseModel):
@@ -20,9 +23,14 @@ class IntakeData(BaseModel):
     files: str = ''
 
 
-@app.get('/')
-async def hello_world() -> str:
-    return 'hello world'
+class VersionModel(BaseModel):
+    rem_api_version: str = rem_version
+    rem_web_api_version: str = api_version
+
+
+@app.get('/version/')
+async def get_version() -> VersionModel:
+    return VersionModel()
 
 
 @app.get('/api/v1/intake/database/')
