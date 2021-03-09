@@ -9,6 +9,7 @@ client = TestClient(app)
 article_id = 12966581
 doc_id = 1
 new_article_id = 87654321
+new_article_id2 = 12026436  # This is for addition testing
 
 value_400 = [-1, 0]
 
@@ -85,6 +86,39 @@ def test_update_data():
 
 def test_read_form():
     response = client.get(f'/api/v1/intake/{article_id}?db_file={test_dup_file}')
+    assert response.status_code == 200
+    content = response.content
+    assert isinstance(content, bytes)
+    assert isinstance(content.decode(), str)
+    assert 'html' in content.decode()
+
+    # Testing reading if record is not available
+    response = client.get(f'/api/v1/intake/{new_article_id2}?db_file={test_dup_file}')
+    assert response.status_code == 200
+    content = response.content
+    assert isinstance(content, bytes)
+    assert isinstance(content.decode(), str)
+    assert 'html' in content.decode()
+
+
+def test_intake_post():
+    post_data = {
+        'summary': 'Summary data for add (extended)',
+        'files': 'Files data for add (extended)',
+    }
+    response = client.post(
+        f'/api/v1/intake/{article_id}?db_file={test_dup_file}',
+        data=post_data)  # Use data for Form data
+    assert response.status_code == 200
+    content = response.content
+    assert isinstance(content, bytes)
+    assert isinstance(content.decode(), str)
+    assert 'html' in content.decode()
+
+    # Check addition of data
+    response = client.post(
+        f'/api/v1/intake/{new_article_id2}?db_file={test_dup_file}',
+        data=post_data)  # Use data for Form data
     assert response.status_code == 200
     content = response.content
     assert isinstance(content, bytes)
