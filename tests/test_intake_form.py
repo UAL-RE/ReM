@@ -6,7 +6,7 @@ from readme_tool.intake_form import app
 
 client = TestClient(app)
 
-article_id = 12345678
+article_id = 12966581
 new_article_id = 87654321
 
 value_400 = [-1, 0]
@@ -69,3 +69,12 @@ def test_add_data():
     assert response.status_code == 200
     # assert isinstance(content, bytes)
     # assert isinstance(ast.literal_eval(content.decode('UTF-8')), dict)
+
+
+def test_read_form():
+    response = client.get(f'/api/v1/intake/{article_id}?db_file={test_dup_file}')
+    assert response.status_code == 200
+    content = response.content
+    assert isinstance(content, bytes)
+    assert isinstance(content.decode(), str)
+    assert 'html' in content.decode()
