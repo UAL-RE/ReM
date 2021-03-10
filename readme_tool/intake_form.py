@@ -30,11 +30,19 @@ class VersionModel(BaseModel):
 
 @app.get('/version/')
 async def get_version() -> VersionModel:
+    """Retrieve version metadata"""
     return VersionModel()
 
 
 @app.get('/api/v1/intake/database/')
 async def get_db(db_file: str = 'intake.json') -> TinyDB:
+    """Retrieve TinyDB README database
+
+    \f
+    :param db_file: JSON filename for TinyDB database
+
+    :return: README database
+    """
     db = TinyDB(db_file)
     return db
 
@@ -42,6 +50,15 @@ async def get_db(db_file: str = 'intake.json') -> TinyDB:
 @app.get('/api/v1/intake/database/{article_id}')
 async def get_data(article_id: int, index: bool = False,
                    db_file: str = 'intake.json') -> Union[dict, int]:
+    """Retrieve record from TinyDB README database
+
+    \f
+    :param article_id: Figshare article ID
+    :param index: Indicate whether to return ``doc_id`` (True) or record (False).
+    :param db_file: JSON filename for TinyDB database
+
+    :return: TinyDB record or ``doc_id``
+    """
     db0 = await get_db(db_file=db_file)
     article_query = q['article_id'] == article_id
     match = db0.search(article_query)
@@ -59,6 +76,13 @@ async def get_data(article_id: int, index: bool = False,
 
 @app.post('/api/v1/intake/database/add')
 async def add_data(response: IntakeData, db_file: str = 'intake.json'):
+    """
+    Add record to TinyDB README database
+
+    \f
+    :param response: Record to include
+    :param db_file: JSON filename for TinyDB database
+    """
     db0 = await get_db(db_file)
     db0.insert(response.dict())
 
@@ -66,6 +90,16 @@ async def add_data(response: IntakeData, db_file: str = 'intake.json'):
 @app.post('/api/v1/intake/database/update/{doc_id}')
 async def update_data(doc_id: int, response: IntakeData,
                       db_file: str = 'intake.json'):
+    """
+    Update record in TinyDB README database
+
+    \f
+    :param doc_id: ``doc_id`` identifier from ``get_data`` to update
+    :param response: Record to use for update
+    :param db_file: JSON filename for TinyDB database
+
+    :return: README database
+    """
     db0 = await get_db(db_file)
     db0.update(response.dict(), doc_ids=[doc_id])
     return db0
@@ -73,7 +107,20 @@ async def update_data(doc_id: int, response: IntakeData,
 
 @app.get('/api/v1/intake/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False,
-                    db_file: str = 'intake.json'):
+                    db_file: str = 'intake.json') \
+        -> templates.TemplateResponse:
+    """
+    Return README form with Figshare metadata and README metadata if available
+
+    \f
+    :param article_id: Figshare `article_id`
+    :param request: HTTP request for template
+    :param stage: Figshare stage or production API.
+                  Stage is only available for Figshare institutions
+    :param db_file: JSON filename for TinyDB database
+
+    :return: HTML content through ``jinja2`` template
+    """
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
 
     try:
@@ -94,8 +141,20 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 @app.post('/api/v1/intake/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
-                      stage: bool = False,
-                      db_file: str = 'intake.json'):
+                      stage: bool = False, db_file: str = 'intake.json') \
+        -> templates.TemplateResponse:
+    """
+    Submit data to incorporate in TinyDB database
+
+    :param article_id: Figshare `article_id`
+    :param request: HTTP request
+    :param summary: Form response for summary data
+    :param files: Form response for files data
+    :param stage: Figshare stage or production API.
+                  Stage is only available for Figshare institutions
+    :param db_file: JSON filename for TinyDB database
+    :return: HTML content through ``jinja2`` template
+    """
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
     result = {'summary': summary,
               'files': files}
