@@ -9,12 +9,14 @@ from tinydb import TinyDB, Query
 from . import __version__ as rem_version
 from . import figshare
 
+api_version = "v1.0.0"
+
+tinydb_file = 'intake.json'
+
 app = FastAPI()
 templates = Jinja2Templates(directory='templates/')
 
-q = Query()
-
-api_version = "v1.0.0"
+q = Query()  # For TinyDB query
 
 
 class IntakeData(BaseModel):
@@ -35,7 +37,7 @@ async def get_version() -> VersionModel:
 
 
 @app.get('/api/v1/intake/database/')
-async def get_db(db_file: str = 'intake.json') -> TinyDB:
+async def get_db(db_file: str = tinydb_file) -> TinyDB:
     """Retrieve TinyDB README database
 
     \f
@@ -49,7 +51,7 @@ async def get_db(db_file: str = 'intake.json') -> TinyDB:
 
 @app.get('/api/v1/intake/database/{article_id}')
 async def get_data(article_id: int, index: bool = False,
-                   db_file: str = 'intake.json') -> Union[dict, int]:
+                   db_file: str = tinydb_file) -> Union[dict, int]:
     """Retrieve record from TinyDB README database
 
     \f
@@ -75,7 +77,7 @@ async def get_data(article_id: int, index: bool = False,
 
 
 @app.post('/api/v1/intake/database/add')
-async def add_data(response: IntakeData, db_file: str = 'intake.json'):
+async def add_data(response: IntakeData, db_file: str = tinydb_file):
     """
     Add record to TinyDB README database
 
@@ -89,7 +91,7 @@ async def add_data(response: IntakeData, db_file: str = 'intake.json'):
 
 @app.post('/api/v1/intake/database/update/{doc_id}')
 async def update_data(doc_id: int, response: IntakeData,
-                      db_file: str = 'intake.json'):
+                      db_file: str = tinydb_file):
     """
     Update record in TinyDB README database
 
@@ -107,7 +109,7 @@ async def update_data(doc_id: int, response: IntakeData,
 
 @app.get('/api/v1/intake/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False,
-                    db_file: str = 'intake.json') \
+                    db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Return README form with Figshare metadata and README metadata if available
@@ -141,7 +143,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 @app.post('/api/v1/intake/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
-                      stage: bool = False, db_file: str = 'intake.json') \
+                      stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Submit data to incorporate in TinyDB database
