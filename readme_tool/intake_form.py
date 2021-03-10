@@ -10,7 +10,7 @@ from . import __version__ as rem_version
 from . import figshare
 
 api_version = "v1.0.0"
-
+readme_url_path = '/readme_tool/'
 tinydb_file = 'intake.json'
 
 app = FastAPI()
@@ -36,7 +36,7 @@ async def get_version() -> VersionModel:
     return VersionModel()
 
 
-@app.get('/api/v1/intake/database/')
+@app.get(readme_url_path + 'database/')
 async def get_db(db_file: str = tinydb_file) -> TinyDB:
     """Retrieve TinyDB README database
 
@@ -49,7 +49,7 @@ async def get_db(db_file: str = tinydb_file) -> TinyDB:
     return db
 
 
-@app.get('/api/v1/intake/database/{article_id}')
+@app.get(readme_url_path + 'database/read/{article_id}')
 async def get_data(article_id: int, index: bool = False,
                    db_file: str = tinydb_file) -> Union[dict, int]:
     """Retrieve record from TinyDB README database
@@ -76,7 +76,7 @@ async def get_data(article_id: int, index: bool = False,
         return db0.get(article_query).doc_id
 
 
-@app.post('/api/v1/intake/database/add')
+@app.post(readme_url_path + 'database/create')
 async def add_data(response: IntakeData, db_file: str = tinydb_file):
     """
     Add record to TinyDB README database
@@ -89,7 +89,7 @@ async def add_data(response: IntakeData, db_file: str = tinydb_file):
     db0.insert(response.dict())
 
 
-@app.post('/api/v1/intake/database/update/{doc_id}')
+@app.post(readme_url_path + 'database/update/{doc_id}')
 async def update_data(doc_id: int, response: IntakeData,
                       db_file: str = tinydb_file):
     """
@@ -107,7 +107,7 @@ async def update_data(doc_id: int, response: IntakeData,
     return db0
 
 
-@app.get('/api/v1/intake/{article_id}')
+@app.get(readme_url_path + 'form/read/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False,
                     db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
@@ -140,7 +140,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
                                                'fs': fs_metadata})
 
 
-@app.post('/api/v1/intake/{article_id}')
+@app.post(readme_url_path + 'form/submit/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
                       stage: bool = False, db_file: str = tinydb_file) \

@@ -2,7 +2,7 @@ from shutil import copy
 import ast
 from fastapi.testclient import TestClient
 
-from readme_tool.intake_form import app, VersionModel
+from readme_tool.intake_form import app, VersionModel, readme_url_path
 
 client = TestClient(app)
 
@@ -28,15 +28,14 @@ def test_get_version():
 
 
 def test_get_db():
-    response = client.get(
-        f'/api/v1/intake/database/?db_file={test_dup_file}'
-    )
+    url = readme_url_path + f'database/?db_file={test_dup_file}'
+    response = client.get(url)
     assert response.status_code == 200
     assert isinstance(response.content, bytes)
 
 
 def test_get_data():
-    url = '/api/v1/intake/database'
+    url = readme_url_path + 'database/read'
 
     # Check for default data
     response = client.get(
@@ -67,34 +66,34 @@ def test_get_data():
 
 
 def test_add_data():
+    url = readme_url_path + f'database/create?db_file={test_dup_file}'
     post_data = {
         'article_id': 87654321,
         'summary': 'Summary data for add',
         'files': 'Files data for add',
     }
 
-    response = client.post(
-        f'/api/v1/intake/database/add?db_file={test_dup_file}',
-        json=post_data
-    )
+    response = client.post(url, json=post_data)
     assert response.status_code == 200
     # assert isinstance(content, bytes)
     # assert isinstance(ast.literal_eval(content.decode('UTF-8')), dict)
 
 
 def test_update_data():
+    url = readme_url_path + f'database/update/{doc_id}?db_file={test_dup_file}'
     post_data = {
         'article_id': article_id,
         'summary': 'Summary data for add',
         'files': 'Files data for add',
     }
-    response = client.post(f'/api/v1/intake/database/update/{doc_id}?db_file={test_dup_file}',
+    response = client.post(url,
                            json=post_data)
     assert response.status_code == 200
 
 
 def test_read_form():
-    response = client.get(f'/api/v1/intake/{article_id}?db_file={test_dup_file}')
+    url = readme_url_path + f'form/read/{article_id}?db_file={test_dup_file}'
+    response = client.get(url)
     assert response.status_code == 200
     content = response.content
     assert isinstance(content, bytes)
@@ -102,7 +101,8 @@ def test_read_form():
     assert 'html' in content.decode()
 
     # Testing reading if record is not available
-    response = client.get(f'/api/v1/intake/{new_article_id2}?db_file={test_dup_file}')
+    url = readme_url_path + f'form/read/{new_article_id2}?db_file={test_dup_file}'
+    response = client.get(url)
     assert response.status_code == 200
     content = response.content
     assert isinstance(content, bytes)
@@ -111,12 +111,12 @@ def test_read_form():
 
 
 def test_intake_post():
+    url = readme_url_path + 'form/submit/'
     post_data = {
         'summary': 'Summary data for add (extended)',
         'files': 'Files data for add (extended)',
     }
-    response = client.post(
-        f'/api/v1/intake/{article_id}?db_file={test_dup_file}',
+    response = client.post(url + f'{article_id}?db_file={test_dup_file}',
         data=post_data)  # Use data for Form data
     assert response.status_code == 200
     content = response.content
@@ -125,8 +125,7 @@ def test_intake_post():
     assert 'html' in content.decode()
 
     # Check addition of data
-    response = client.post(
-        f'/api/v1/intake/{new_article_id2}?db_file={test_dup_file}',
+    response = client.post(url + f'{new_article_id2}?db_file={test_dup_file}',
         data=post_data)  # Use data for Form data
     assert response.status_code == 200
     content = response.content
