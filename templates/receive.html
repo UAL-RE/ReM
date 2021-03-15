@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submission - UA Research Data Repository README Form</title>
+</head>
+
+<body>
+<h1>Submission - UA Research Data Repository README Form</h1>
+
+<table border="1">
+	{% for key in fs_metadata %}
+	<tr>
+		<th>{{ key }}</th>
+		<td>{{ fs_metadata[key]|safe }}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+
+<p>Thank you for submitting your metadata!<br><br>
+	Here are specific metadata as you provided when you uploaded your data<br>
+	Here's a summary of your responses:<br>
+	<table>
+	</table>
+
+	If you wish to retake the survey, please click on this <a href="{{ request.url }}">link</a>
+
+</p>
+</body>
+</html>

@@ -170,10 +170,9 @@ async def intake_post(article_id: int, request: Request,
     except HTTPException:
         await add_data(IntakeData(**post_data), db_file=db_file)
 
-    return templates.TemplateResponse('intake.html',
+    return templates.TemplateResponse('receive.html',
                                       context={'request': request,
-                                               'result': result,
-                                               'submit_dict': result,
-                                               'fs': fs_metadata,
+                                               'result': post_data,
+                                               'fs_metadata': fs_metadata,
                                                }
                                       )
