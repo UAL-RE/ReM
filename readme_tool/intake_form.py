@@ -107,7 +107,7 @@ async def update_data(doc_id: int, response: IntakeData,
     return db0
 
 
-@app.get(readme_url_path + 'form/read/{article_id}')
+@app.get(readme_url_path + 'form/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False,
                     db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
@@ -140,7 +140,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
                                                'fs': fs_metadata})
 
 
-@app.post(readme_url_path + 'form/submit/{article_id}')
+@app.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
                       stage: bool = False, db_file: str = tinydb_file) \
@@ -157,6 +157,7 @@ async def intake_post(article_id: int, request: Request,
     :param db_file: JSON filename for TinyDB database
     :return: HTML content through ``jinja2`` template
     """
+
     fs_metadata = await figshare.metadata_get(article_id, stage=stage)
     result = {'summary': summary,
               'files': files}
