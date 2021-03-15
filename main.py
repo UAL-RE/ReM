@@ -2,7 +2,7 @@
 
 import uvicorn
 
-from readme_tool.intake_form import app
+import readme_tool
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=8000)
+    uvicorn.run("readme_tool.intake_form:app", port=8000, reload=True)
