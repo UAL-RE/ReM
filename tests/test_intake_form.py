@@ -93,7 +93,7 @@ def test_update_data():
 def test_read_form():
     # Test for existing data (article_id), non-existing data (new_article_id2)
     for a_id in [article_id, new_article_id2]:
-        url = readme_url_path + f'form/read/{a_id}?db_file={test_dup_file}'
+        url = readme_url_path + f'form/{a_id}?db_file={test_dup_file}'
         response = client.get(url)
         assert response.status_code == 200
         content = response.content
@@ -109,7 +109,7 @@ def test_intake_post():
     }
 
     for a_id in [article_id, new_article_id2]:
-        url = readme_url_path + f'form/submit/{a_id}?db_file={test_dup_file}'
+        url = readme_url_path + f'form/{a_id}?db_file={test_dup_file}'
 
         response = client.post(url, data=post_data)  # Use data for Form data
         assert response.status_code == 200
