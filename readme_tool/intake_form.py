@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 from pydantic import BaseModel
 from typing import Union
@@ -15,6 +16,8 @@ tinydb_file = 'intake.json'
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates/')
+
+app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 
 q = Query()  # For TinyDB query
 
