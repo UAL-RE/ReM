@@ -29,12 +29,18 @@ Here are your responses to this form:<br>
 <button class="accordion">README.txt Metadata - Expand for details</button>
 <div class="panel">
 	<table border="1">
+	{% for key in result %}
+	<tr>
+		<th>{{ key }}</th>
+		<td>{{ result[key]|safe }}</td>
+	</tr>
+	{% endfor %}
 	</table>
 </div>
 
 <p>
-	If you wish to retake the survey, please click on this <a href="{{ request.url }}">link</a>
-<
+	If you wish to retake the survey, please click <a href="{{ request.url }}"><button>here</button></a>
+</p>
 
 <script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
 

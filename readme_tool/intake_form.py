@@ -175,7 +175,7 @@ async def intake_post(article_id: int, request: Request,
 
     return templates.TemplateResponse('receive.html',
                                       context={'request': request,
-                                               'result': post_data,
+                                               'result': result,
                                                'fs_metadata': fs_metadata,
                                                }
                                       )
