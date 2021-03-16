@@ -11,6 +11,8 @@ doc_id = 1
 new_article_id = 87654321
 new_article_id2 = 12026436  # This is for addition testing
 
+article_id_404 = 12345678
+
 value_400 = [-1, 0]
 
 test_file = 'tests_data/tinydb.json'
@@ -101,6 +103,12 @@ def test_read_form():
         assert isinstance(content.decode(), str)
         assert 'html' in content.decode()
 
+    # 404 check
+    url = readme_url_path + f'form/{article_id_404}?db_file={test_dup_file}'
+    response = client.get(url)
+    content = response.content
+    assert '404' in content.decode()
+
 
 def test_intake_post():
     post_data = {
@@ -117,3 +125,9 @@ def test_intake_post():
         assert isinstance(content, bytes)
         assert isinstance(content.decode(), str)
         assert 'html' in content.decode()
+
+    # 404 check
+    url = readme_url_path + f'form/{article_id_404}?db_file={test_dup_file}'
+    response = client.post(url, data=post_data)
+    content = response.content
+    assert '404' in content.decode()

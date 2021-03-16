@@ -126,7 +126,11 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 
     :return: HTML content through ``jinja2`` template
     """
-    fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+    try:
+        fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+    except HTTPException:
+        return templates.TemplateResponse('404.html',
+                                          context={'request': request})
 
     try:
         submit_dict = await get_data(article_id, db_file=db_file)
@@ -161,7 +165,12 @@ async def intake_post(article_id: int, request: Request,
     :return: HTML content through ``jinja2`` template
     """
 
-    fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+    try:
+        fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+    except HTTPException:
+        return templates.TemplateResponse('404.html',
+                                          context={'request': request})
+
     result = {'summary': summary,
               'files': files}
 
