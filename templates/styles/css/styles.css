@@ -11,10 +11,25 @@
   transition: 0.4s;
 }
 
-/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+/* Background color to the button if it is clicked on (add the .active class with JS),
+   and when you move the mouse over it (hover) */
 .active, .accordion:hover {
   background-color: #ccc;
 }
+
+.accordion:after {
+  content: '\02795'; /* "plus" sign (+) */
+  font-size: 13px;
+  font-weight: bold;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* "minus" sign (-) */
+}
+
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
