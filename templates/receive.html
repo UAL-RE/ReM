@@ -3,29 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Submission - UA Research Data Repository README Form</title>
+
+		<link rel="stylesheet" href="{{ url_for('templates', path='/styles/css/styles.css') }}">
 </head>
 
 <body>
 <h1>Submission - UA Research Data Repository README Form</h1>
 
-<table border="1">
+Thank you for your response!<br><br>
+
+Here are specific metadata that you submitted with your ReDATA upload<br>
+<button class="accordion">ReDATA Metadata - Expand for details</button>
+<div class="panel">
+	<table border="1">
 	{% for key in fs_metadata %}
 	<tr>
 		<th>{{ key }}</th>
 		<td>{{ fs_metadata[key]|safe }}</td>
 	</tr>
 	{% endfor %}
-</table>
-
-
-<p>Thank you for submitting your metadata!<br><br>
-	Here are specific metadata as you provided when you uploaded your data<br>
-	Here's a summary of your responses:<br>
-	<table>
 	</table>
+</div>
 
+Here are your responses to this form:<br>
+<button class="accordion">README.txt Metadata - Expand for details</button>
+<div class="panel">
+	<table border="1">
+	</table>
+</div>
+
+<p>
 	If you wish to retake the survey, please click on this <a href="{{ request.url }}">link</a>
+<
 
-</p>
+<script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
+
 </body>
 </html>
