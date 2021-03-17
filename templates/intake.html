@@ -26,9 +26,9 @@
 <h2>1. Title of Your Deposit</h2>
 <p style="font-size:18px;">{{ fs.title }}<br>
 
------ <br>
-Note: This information was retrieved from the information in your upload. If you need to
-    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+<br>----- <br>
+<i>Note: This information was retrieved from the information in your upload.<br>
+  If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 </p>
 
 <h2>2. Preferred Citation</h2>
@@ -37,18 +37,18 @@ Note: This information was retrieved from the information in your upload. If you
   {{ cite_text }}<br>
 {% endfor %}<br>
 
------ <br>
-Note: This is the ReDATA citation for your upload<br><br>
-If you have a preferred citation (e.g., journal publication) that you wish to use, please<br>
-provide it below following the <b>DataCite format</b>
+<br>----- <br>
+<i>Note: This is the ReDATA citation for your upload<br><br>
+  If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
+  please provide it below following the <b>DataCite format</b></i>
 </p>
 
 <h2>3. License</h2>
 <p style="font-size:18px;">{{ fs.license.name }}<br>
 
------ <br>
-Note: This information was retrieved from the information in your upload. If you need to
-    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+<br>----- <br>
+<i>Note: This information was retrieved from the information in your upload.<br>
+  If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 </p>
 
 <h2>4. Digital Object Identifier (DOI)</h2>
@@ -63,13 +63,12 @@ Note: This information was retrieved from the information in your upload. If you
 
 {{ fs.summary | safe}}
 <p>
-<br>
-
-    ----- <br>
-    Note: This information was retrieved from the information in your upload under the
-    Description field. If you need to change it, please do so within ReDATA<br><br>
-    If you wish to append additional information to your summary, please use the text box below.
-    The additional information will only appear in your README.txt file
+  <br>
+  ----- <br>
+  <i>Note: This information was retrieved from the information in your upload under the Description field.<br>
+    If you need to change it, please do so within</i> ReDATA<br><br>
+  If you wish to append additional information to your summary, please use the text box below.<br>
+  The additional information will only appear in your README.txt file
 </p>
 
 <form method="post">
