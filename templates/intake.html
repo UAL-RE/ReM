@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>UA Research Data Repository README Form</title>
+
+  <link rel="stylesheet" href="{{ url_for('templates', path='/styles/css/styles.css') }}">
 </head>
 
 <body>
@@ -35,14 +37,27 @@
 <h2>2. Preferred Citation (OPTIONAL)</h2>
 <p style="font-size:18px;">
 {% for cite_text in fs.preferred_citation %}
-  {{ cite_text }}<br>
-{% endfor %}<br>
+  &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
+{% endfor %}
+</p>
 
 <br>----- <br>
-<i>Note: This is the ReDATA citation for your upload<br><br>
-  If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
-  please provide it below following the <b>DataCite format</b></i>
-</p>
+<i>Note: This is the ReDATA citation for your upload</i><br><br>
+If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
+please provide it below following the <b>DataCite format</b><br><br>
+
+<b>Tip</b>: The <a href="https://citation.crosscite.org/">DOI Citation Formatter Tool</a>
+  can provide the correct format.<br>
+<b>Note</b>: For journal-like publication, select "apa" for the formatting style
+
+Please separate into <underline>four</underline> separate lines (i.e., carriage returns)<br>
+<button class="accordion">Example</button>
+<div class="panel">
+  Behroozi, Peter; Wechsler, Risa H; Hearin, Andrew P; Conroy, Charlie (2019).<br>
+  UniverseMachine: The correlation between galaxy growth and dark matter halo assembly from z=0−10.<br>
+  Monthly Notices of the Royal Astronomical Society, Volume 488, Issue 3, 3143-3194<br>
+  https://doi.org/10.1093/mnras/stz1182<br>
+</div>
 
 <h2>3. License</h2>
 <p style="font-size:18px;">
@@ -52,7 +67,6 @@
 <br>----- <br>
 <i>Note: This information was retrieved from the information in your upload.<br>
   If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
-</p>
 
 <h2>4. Digital Object Identifier (DOI) Link</h2>
 <p style="font-size:18px;">
@@ -102,6 +116,8 @@
 <form method="post" id="usrform">
   <input type="submit">
 </form>
+
+<script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
 
 </body>
 </html>
