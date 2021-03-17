@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>UA Research Data Repository README Form</title>
+  <meta charset="UTF-8">
+  <title>UA Research Data Repository README Form</title>
 </head>
 
 <body>
 <h1>UA Research Data Repository README Form</h1>
 
-<p>This form is used to obtain specific information about your dataset so we
-can create a README.txt file.  The README.txt file will be included in your
-deposit; it enables those who retrieve your data to understand and be able
-to re-use the data.<br><br>
+<p>
+  This form is used to obtain specific information about your dataset so we
+  can create a README.txt file.  The README.txt file will be included in your
+  deposit; it enables those who retrieve your data to understand and be able
+  to re-use the data.<br><br>
 
-The README.txt file will automatically contain many of the information that
-you provided when you uploaded your dataset.  This prevents errors and makes
-it easier for you to focus on custom content.<br><br>
+  The README.txt file will automatically contain many of the information that
+  you provided when you uploaded your dataset.  This prevents errors and makes
+  it easier for you to focus on custom content.<br><br>
 
-The flow of content is in the order as it will appear in the README.txt file.
-Please leave a field empty if you feel that a section is correct as-is or is
-not needed.
+  The flow of content is in the order as it will appear in the README.txt file.
+  Please leave a field empty if you feel that a section is correct as-is or is
+  not needed.
 </p>
+
 <h2>1. Title of Your Deposit</h2>
 <p style="font-size:18px;">{{ fs.title }}<br>
 
@@ -33,7 +35,7 @@ Note: This information was retrieved from the information in your upload. If you
 <p style="font-size:18px;">
 {% for cite_text in fs.preferred_citation %}
   {{ cite_text }}<br>
-{% endfor %}
+{% endfor %}<br>
 
 ----- <br>
 Note: This is the ReDATA citation for your upload<br><br>
@@ -71,25 +73,23 @@ Note: This information was retrieved from the information in your upload. If you
 </p>
 
 <form method="post">
-    <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
+  <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
 </form>
 
-<h2>
-    6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)
-</h2>
+<h2>6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</h2>
 <p>
-    Please describe the files included in your deposit.
-    Below is the suggested format and examples are shown:<br><br>
+  Please describe the files included in your deposit.
+  Below is the suggested format and examples are shown:<br><br>
 
-    #### Folder_1_Name.zip: Description of contents
-    - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
-    - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
+  #### Folder_1_Name.zip: Description of contents
+  - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
+  - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
 
-    (Repeat as needed)<br>
+  (Repeat as needed)<br>
 </p>
 
 <form method="post">
-    <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
+  <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
 </form>
 
 <p>Result: {{ result.summary }}</p>
@@ -98,7 +98,7 @@ Note: This information was retrieved from the information in your upload. If you
 
 
 <form method="post" id="usrform">
-    <input type="submit">
+  <input type="submit">
 </form>
 
 </body>
