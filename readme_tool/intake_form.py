@@ -26,6 +26,9 @@ class IntakeData(BaseModel):
     article_id: int
     summary: str = ''
     files: str = ''
+    materials: str = ''
+    contributors: str = ''
+    notes: str = ''
 
 
 class VersionModel(BaseModel):
@@ -135,10 +138,15 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
     try:
         submit_dict = await get_data(article_id, db_file=db_file)
     except HTTPException:
-        submit_dict = {'summary': '', 'files': ''}
+        submit_dict = dict.fromkeys(
+            ['summary', 'files', 'materials', 'contributors', 'notes'], ''
+        )
 
     result = {'summary': 'Provide additional summary info',
-              'files': 'Provide your files'}
+              'files': 'Provide your files',
+              'materials': 'Provide a description of your file',
+              'contributors': 'Provide list of contributors',
+              'notes': 'Provide additional notes'}
 
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
@@ -150,6 +158,8 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 @app.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       summary: str = Form(...), files: str = Form(...),
+                      materials: str = Form(...), contributors: str = Form(...),
+                      notes: str = Form(...),
                       stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
@@ -159,6 +169,9 @@ async def intake_post(article_id: int, request: Request,
     :param request: HTTP request
     :param summary: Form response for summary data
     :param files: Form response for files data
+    :param materials: Form response for materials and method data
+    :param contributors: Form response for contributor roles data
+    :param notes: Form response for additional notes data
     :param stage: Figshare stage or production API.
                   Stage is only available for Figshare institutions
     :param db_file: JSON filename for TinyDB database
@@ -172,7 +185,11 @@ async def intake_post(article_id: int, request: Request,
                                           context={'request': request})
 
     result = {'summary': summary,
-              'files': files}
+              'files': files,
+              'materials': materials,
+              'contributors': contributors,
+              'notes': notes,
+              }
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 

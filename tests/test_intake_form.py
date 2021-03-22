@@ -73,6 +73,9 @@ def test_add_data():
         'article_id': 87654321,
         'summary': 'Summary data for add',
         'files': 'Files data for add',
+        'materials': 'Materials data for add',
+        'contributors': 'Contributor roles for add',
+        'notes': 'Additional notes for add',
     }
 
     response = client.post(url, json=post_data)
@@ -87,6 +90,9 @@ def test_update_data():
         'article_id': article_id,
         'summary': 'Summary data for add',
         'files': 'Files data for add',
+        'materials': 'Materials data for add',
+        'contributors': 'Contributor roles for add',
+        'notes': 'Additional notes for add',
     }
     response = client.post(url, json=post_data)
     assert response.status_code == 200
@@ -114,6 +120,9 @@ def test_intake_post():
     post_data = {
         'summary': 'Summary data for add (extended)',
         'files': 'Files data for add (extended)',
+        'materials': 'Materials data for add (extended)',
+        'contributors': 'Contributor roles for add (extended)',
+        'notes': 'Additional notes for add (extended)',
     }
 
     for a_id in [article_id, new_article_id2]:
