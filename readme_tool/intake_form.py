@@ -24,6 +24,7 @@ q = Query()  # For TinyDB query
 
 class IntakeData(BaseModel):
     article_id: int
+    citation: str = ''
     summary: str = ''
     files: str = ''
     materials: str = ''
@@ -139,7 +140,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
         submit_dict = await get_data(article_id, db_file=db_file)
     except HTTPException:
         submit_dict = dict.fromkeys(
-            ['summary', 'files', 'materials', 'contributors', 'notes'], ''
+            ['citation', 'summary', 'files', 'materials', 'contributors', 'notes'], ''
         )
 
     result = {'summary': 'Provide additional summary info',
@@ -157,9 +158,9 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 
 @app.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
-                      summary: str = Form(...), files: str = Form(...),
-                      materials: str = Form(...), contributors: str = Form(...),
-                      notes: str = Form(...),
+                      citation: str = Form(...), summary: str = Form(...),
+                      files: str = Form(...), materials: str = Form(...),
+                      contributors: str = Form(...), notes: str = Form(...),
                       stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
@@ -167,6 +168,7 @@ async def intake_post(article_id: int, request: Request,
 
     :param article_id: Figshare `article_id`
     :param request: HTTP request
+    :param citation: Form response for preferred citation data
     :param summary: Form response for summary data
     :param files: Form response for files data
     :param materials: Form response for materials and method data
@@ -184,12 +186,14 @@ async def intake_post(article_id: int, request: Request,
         return templates.TemplateResponse('404.html',
                                           context={'request': request})
 
-    result = {'summary': summary,
-              'files': files,
-              'materials': materials,
-              'contributors': contributors,
-              'notes': notes,
-              }
+    result = {
+        'citation': citation,
+        'summary': summary,
+        'files': files,
+        'materials': materials,
+        'contributors': contributors,
+        'notes': notes,
+    }
 
     post_data = {'article_id': fs_metadata['article_id'], **result}
 

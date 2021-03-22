@@ -71,6 +71,7 @@ def test_add_data():
     url = readme_url_path + f'database/create?db_file={test_dup_file}'
     post_data = {
         'article_id': 87654321,
+        'citation': 'Preferred citation data for add',
         'summary': 'Summary data for add',
         'files': 'Files data for add',
         'materials': 'Materials data for add',
@@ -88,6 +89,7 @@ def test_update_data():
     url = readme_url_path + f'database/update/{doc_id}?db_file={test_dup_file}'
     post_data = {
         'article_id': article_id,
+        'citation': 'Preferred citation data for add',
         'summary': 'Summary data for add',
         'files': 'Files data for add',
         'materials': 'Materials data for add',
@@ -119,6 +121,7 @@ def test_read_form():
 def test_intake_post():
     post_data = {
         'summary': 'Summary data for add (extended)',
+        'citation': 'Preferred citation data for add (extended)',
         'files': 'Files data for add (extended)',
         'materials': 'Materials data for add (extended)',
         'contributors': 'Contributor roles for add (extended)',
