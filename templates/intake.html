@@ -8,7 +8,20 @@
 </head>
 
 <body>
-<h1>UA Research Data Repository README Form</h1>
+
+<div class="topnav">
+  <a class="active" href="#home">Overview</a>
+  <a href="#cite_head">Preferred Citation</a>
+  <a href="#summary_head">Summary</a>
+  <a href="#files_head">Files and Folders</a>
+  <a href="#materials_head">Materials and Methods</a>
+  <a href="#contributors_head">Contributor Roles</a>
+  <a href="#notes_head">Additional Notes</a>
+</div>
+
+
+<div class="main">
+  <h1><span id="home">UA Research Data Repository README Form</span></h1>
 
 <p>
   This form is used to obtain specific information about your dataset so we
@@ -34,7 +47,7 @@
 <i>Note: This information was retrieved from the information in your upload.<br>
   If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 
-<h2>2. Preferred Citation (OPTIONAL)</h2>
+<h2><span id="cite_head">2. Preferred Citation (OPTIONAL)</span></h2>
 <p style="font-size:18px;">
 {% for cite_text in fs.preferred_citation %}
   &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
@@ -82,7 +95,7 @@ Please separate into <underline>four</underline> separate lines (i.e., carriage 
   &nbsp;&nbsp;&nbsp;{{ fs.doi }}
 </p>
 
-<h2>5. Summary (OPTIONAL):</h2>
+<h2><span id="summary_head">5. Summary (OPTIONAL):</span></h2>
 
 {{ fs.summary | safe}}
 <p>
@@ -98,7 +111,7 @@ Please separate into <underline>four</underline> separate lines (i.e., carriage 
   <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
 </form>
 
-<h2>6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</h2>
+<h2><span id="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</span></h2>
 <p>
   Please describe the files included in your deposit.
   Below is the suggested format and examples are shown:<br><br>
@@ -115,7 +128,7 @@ Please separate into <underline>four</underline> separate lines (i.e., carriage 
 </form>
 
 
-<h2>7. Materials and Methods Section (OPTIONAL)</h2>
+<h2><span id="materials_head">7. Materials and Methods Section (OPTIONAL)</span></h2>
 <p>
   Please describe the materials and methods needed for your deposit.
   Below are suggested formatting and examples:
@@ -153,8 +166,7 @@ Please separate into <underline>four</underline> separate lines (i.e., carriage 
   <textarea id="materials" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.materials }}</textarea>
 </form>
 
-<h2>8. Contributor Roles Section (OPTIONAL)
-</h2>
+<h2><span id="contributors_head">8. Contributor Roles Section (OPTIONAL)</span></h2>
 <p>
   Fill in later<br>
 </p>
@@ -163,9 +175,7 @@ Please separate into <underline>four</underline> separate lines (i.e., carriage 
   <textarea id="contributors" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.contributors }}</textarea>
 </form>
 
-<h2>
-  9. Additional Notes (OPTIONAL)
-</h2>
+<h2><span id="notes_head">9. Additional Notes (OPTIONAL)</span></h2>
 <p>
   Add any additional notes that are important in the text box below.
 </p>
@@ -185,6 +195,8 @@ Note: This information was retrieved from the information in your upload. If you
 </form>
 
 <script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
+
+</div>
 
 </body>
 </html>
