@@ -24,179 +24,178 @@
 <div class="main">
   <h1><span id="home">UA Research Data Repository README Form</span></h1>
 
-<p>
-  This form is used to obtain specific information about your dataset so we
-  can create a README.txt file.  The README.txt file will be included in your
-  deposit; it enables those who retrieve your data to understand and be able
-  to re-use the data.<br><br>
+  <p>
+    This form is used to obtain specific information about your dataset so we
+    can create a README.txt file.  The README.txt file will be included in your
+    deposit; it enables those who retrieve your data to understand and be able
+    to re-use the data.<br><br>
 
-  The README.txt file will automatically contain many of the information that
-  you provided when you uploaded your dataset.  This prevents errors and makes
-  it easier for you to focus on custom content.<br><br>
+    The README.txt file will automatically contain many of the information that
+    you provided when you uploaded your dataset.  This prevents errors and makes
+    it easier for you to focus on custom content.<br><br>
 
-  The flow of content is in the order as it will appear in the README.txt file.
-  Please leave a field empty if you feel that a section is correct as-is or is
-  not needed.
-</p>
+    The flow of content is in the order as it will appear in the README.txt file.
+    Please leave a field empty if you feel that a section is correct as-is or is
+    not needed.
+  </p>
 
-<h2>1. Title of Your Deposit</h2>
-<p style="font-size:18px;">
-  &nbsp;&nbsp;&nbsp;"{{ fs.title }}"
-</p>
+  <h2>1. Title of Your Deposit</h2>
+  <p style="font-size:18px;">
+    &nbsp;&nbsp;&nbsp;"{{ fs.title }}"
+  </p>
 
-<br>----- <br>
-<i>Note: This information was retrieved from the information in your upload.<br>
-  If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+  <br>----- <br>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 
-<h2><span id="cite_head">2. Preferred Citation (OPTIONAL)</span></h2>
-<p style="font-size:18px;">
-{% for cite_text in fs.preferred_citation %}
-  &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
-{% endfor %}
-</p>
+  <h2><span id="cite_head">2. Preferred Citation (OPTIONAL)</span></h2>
+  <p style="font-size:18px;">
+  {% for cite_text in fs.preferred_citation %}
+    &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
+  {% endfor %}
+  </p>
 
-<br>----- <br>
-<i>Note: This is the ReDATA citation for your upload</i><br><br>
-If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
-please provide it below following the <b>DataCite format</b><br><br>
+  <br>----- <br>
+  <i>Note: This is the ReDATA citation for your upload</i><br><br>
+  If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
+  please provide it below following the <b>DataCite format</b><br><br>
 
-<b>Tip</b>: The <a href="https://citation.crosscite.org/">DOI Citation Formatter Tool</a>
-  can provide the correct format.<br>
-<b>Note</b>: For journal-like publication, select "apa" for the formatting style
+  <b>Tip</b>: The <a href="https://citation.crosscite.org/">DOI Citation Formatter Tool</a>
+    can provide the correct format.<br>
+  <b>Note</b>: For journal-like publication, select "apa" for the formatting style
 
-Please separate into <underline>four</underline> separate lines (i.e., carriage returns)<br>
-<button class="accordion">Example</button>
-<div class="panel">
-  Behroozi, Peter; Wechsler, Risa H; Hearin, Andrew P; Conroy, Charlie (2019).<br>
-  UniverseMachine: The correlation between galaxy growth and dark matter halo assembly from z=0−10.<br>
-  Monthly Notices of the Royal Astronomical Society, Volume 488, Issue 3, 3143-3194<br>
-  https://doi.org/10.1093/mnras/stz1182<br>
-</div>
+  Please separate into <underline>four</underline> separate lines (i.e., carriage returns)<br>
+  <button class="accordion">Example</button>
+  <div class="panel">
+    Behroozi, Peter; Wechsler, Risa H; Hearin, Andrew P; Conroy, Charlie (2019).<br>
+    UniverseMachine: The correlation between galaxy growth and dark matter halo assembly from z=0−10.<br>
+    Monthly Notices of the Royal Astronomical Society, Volume 488, Issue 3, 3143-3194<br>
+    https://doi.org/10.1093/mnras/stz1182<br>
+  </div>
 
-<form method="post">
-  <textarea id="citation" name="citation" rows="10" cols="75" form="usrform">{{ submit_dict.citation }}</textarea>
-</form>
+  <form method="post">
+    <textarea id="citation" name="citation" rows="10" cols="75" form="usrform">{{ submit_dict.citation }}</textarea>
+  </form>
 
 
-<h2>3. License</h2>
-<p style="font-size:18px;">
-  &nbsp;&nbsp;&nbsp;{{ fs.license.name }}
-</p>
+  <h2>3. License</h2>
+  <p style="font-size:18px;">
+    &nbsp;&nbsp;&nbsp;{{ fs.license.name }}
+  </p>
 
-<br>----- <br>
-<i>Note: This information was retrieved from the information in your upload.<br>
-  If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+  <br>----- <br>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 
-<h2>4. Digital Object Identifier (DOI) Link</h2>
-<p>
-  The DOI Link for your deposit will be the following and will go live once the deposit is published.<br>
-  This cannot be changed/customized:</p>
+  <h2>4. Digital Object Identifier (DOI) Link</h2>
+  <p>
+    The DOI Link for your deposit will be the following and will go live once the deposit is published.<br>
+    This cannot be changed/customized:</p>
 
-<p style="font-size:18px;">
-  &nbsp;&nbsp;&nbsp;{{ fs.doi }}
-</p>
+  <p style="font-size:18px;">
+    &nbsp;&nbsp;&nbsp;{{ fs.doi }}
+  </p>
 
-<h2><span id="summary_head">5. Summary (OPTIONAL):</span></h2>
+  <h2><span id="summary_head">5. Summary (OPTIONAL):</span></h2>
 
-{{ fs.summary | safe}}
-<p>
+  {{ fs.summary | safe}}
+  <p>
+    <br>
+    ----- <br>
+    <i>Note: This information was retrieved from the information in your upload under the Description field.<br>
+      If you need to change it, please do so within</i> ReDATA<br><br>
+    If you wish to append additional information to your summary, please use the text box below.<br>
+    The additional information will only appear in your README.txt file
+  </p>
+
+  <form method="post">
+    <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
+  </form>
+
+  <h2><span id="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</span></h2>
+  <p>
+    Please describe the files included in your deposit.
+    Below is the suggested format and examples are shown:<br><br>
+
+    #### Folder_1_Name.zip: Description of contents
+    - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
+    - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
+
+    (Repeat as needed)<br>
+  </p>
+
+  <form method="post">
+    <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
+  </form>
+
+
+  <h2><span id="materials_head">7. Materials and Methods Section (OPTIONAL)</span></h2>
+  <p>
+    Please describe the materials and methods needed for your deposit.
+    Below are suggested formatting and examples:
+
+    <ul>
+      <li>Software 1 (version number). Short description of how it is used.</li>
+      <li>Software 2 (version number). Short description of how it is used.</li>
+      <li>Instrument name/model, manufacturer. Short description of why it's needed.</li>
+    </ul>
+  </p>
+
+  <button class="accordion">Software Example</button>
+  <div class="panel">
+    - Python 3.7.5. Required libraries: pandas, numpy.
+  </div>
+
   <br>
+  <button class="accordion">Media Instruments Examples</button>
+  <div class="panel">
+    - Audacity, Praat, etc. The .wav audio files can be played or opened in any of the above freeware programs or in most commercial audio software (e.g., Windows Media Player).
+    - Microsoft 365 PowerPoint. The slides are best viewed using PowerPoint.
+  </div>
+
+  <br>
+  <button class="accordion">Instrument Example</button>
+  <div class="panel">
+    - Low-cost double pendulum for high-quality data collection with open-source video tracking and analysis/Version 2, Michigan State University (https://data.mendeley.com/datasets/z4hvxjgtbz/2), This instrument is necessary for validating our robotics locomotion analysis
+  </div>
+  <br>
+
+  <br>
+  <b>Note</b>: Please recommend open-source software whenever possible.<br>
+
+  <form method="post">
+    <textarea id="materials" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.materials }}</textarea>
+  </form>
+
+  <h2><span id="contributors_head">8. Contributor Roles Section (OPTIONAL)</span></h2>
+  <p>
+    Fill in later<br>
+  </p>
+
+  <form method="post">
+    <textarea id="contributors" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.contributors }}</textarea>
+  </form>
+
+  <h2><span id="notes_head">9. Additional Notes (OPTIONAL)</span></h2>
+  <p>
+    Add any additional notes that are important in the text box below.
+  </p>
+
+  <form method="post">
+    <textarea id="notes" name="notes" rows="10" cols="75" form="usrform">{{ submit_dict.notes }}</textarea>
+  </form>
+
+  <p>
   ----- <br>
-  <i>Note: This information was retrieved from the information in your upload under the Description field.<br>
-    If you need to change it, please do so within</i> ReDATA<br><br>
-  If you wish to append additional information to your summary, please use the text box below.<br>
-  The additional information will only appear in your README.txt file
-</p>
+  Note: This information was retrieved from the information in your upload. If you need to
+    change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
+  </p>
 
-<form method="post">
-  <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
-</form>
+  <form method="post" id="usrform">
+    <input type="submit">
+  </form>
 
-<h2><span id="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</span></h2>
-<p>
-  Please describe the files included in your deposit.
-  Below is the suggested format and examples are shown:<br><br>
-
-  #### Folder_1_Name.zip: Description of contents
-  - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
-  - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
-
-  (Repeat as needed)<br>
-</p>
-
-<form method="post">
-  <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
-</form>
-
-
-<h2><span id="materials_head">7. Materials and Methods Section (OPTIONAL)</span></h2>
-<p>
-  Please describe the materials and methods needed for your deposit.
-  Below are suggested formatting and examples:
-
-  <ul>
-    <li>Software 1 (version number). Short description of how it is used.</li>
-    <li>Software 2 (version number). Short description of how it is used.</li>
-    <li>Instrument name/model, manufacturer. Short description of why it's needed.</li>
-  </ul>
-</p>
-
-<button class="accordion">Software Example</button>
-<div class="panel">
-  - Python 3.7.5. Required libraries: pandas, numpy.
-</div>
-
-<br>
-<button class="accordion">Media Instruments Examples</button>
-<div class="panel">
-  - Audacity, Praat, etc. The .wav audio files can be played or opened in any of the above freeware programs or in most commercial audio software (e.g., Windows Media Player).
-  - Microsoft 365 PowerPoint. The slides are best viewed using PowerPoint.
-</div>
-
-<br>
-<button class="accordion">Instrument Example</button>
-<div class="panel">
-  - Low-cost double pendulum for high-quality data collection with open-source video tracking and analysis/Version 2, Michigan State University (https://data.mendeley.com/datasets/z4hvxjgtbz/2), This instrument is necessary for validating our robotics locomotion analysis
-</div>
-<br>
-
-<br>
-<b>Note</b>: Please recommend open-source software whenever possible.<br>
-
-<form method="post">
-  <textarea id="materials" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.materials }}</textarea>
-</form>
-
-<h2><span id="contributors_head">8. Contributor Roles Section (OPTIONAL)</span></h2>
-<p>
-  Fill in later<br>
-</p>
-
-<form method="post">
-  <textarea id="contributors" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.contributors }}</textarea>
-</form>
-
-<h2><span id="notes_head">9. Additional Notes (OPTIONAL)</span></h2>
-<p>
-  Add any additional notes that are important in the text box below.
-</p>
-
-<form method="post">
-  <textarea id="notes" name="notes" rows="10" cols="75" form="usrform">{{ submit_dict.notes }}</textarea>
-</form>
-
-<p>
------ <br>
-Note: This information was retrieved from the information in your upload. If you need to
-  change it, please do so within <a href="https://arizona.figshare.com">ReDATA</a><br><br>
-</p>
-
-<form method="post" id="usrform">
-  <input type="submit">
-</form>
-
-<script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
-
+  <script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
 </div>
 
 </body>
