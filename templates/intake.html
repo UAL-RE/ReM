@@ -22,7 +22,7 @@
 </div>
 
 <div class="main">
-  <h1><span id="home">UA Research Data Repository README Form</span></h1>
+  <h1><a class="anchor" name="home">UA Research Data Repository README Form</a></h1>
 
   <p>
     This form is used to obtain specific information about your dataset so we
@@ -48,7 +48,8 @@
   <i>Note: This information was retrieved from the information in your upload.<br>
     If you need to change it, please do so within</i> <a href="https://arizona.figshare.com">ReDATA</a><br><br>
 
-  <h2><span id="cite_head">2. Preferred Citation (OPTIONAL)</span></h2>
+  <h2><a class="anchor" name="cite_head">2. Preferred Citation (OPTIONAL)</a></h2>
+
   <p style="font-size:18px;">
   {% for cite_text in fs.preferred_citation %}
     &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
@@ -96,7 +97,7 @@
     &nbsp;&nbsp;&nbsp;{{ fs.doi }}
   </p>
 
-  <h2><span id="summary_head">5. Summary (OPTIONAL):</span></h2>
+  <h2><a class="anchor" name="summary_head">5. Summary (OPTIONAL):</a></h2>
 
   {{ fs.summary | safe}}
   <p>
@@ -112,7 +113,7 @@
     <textarea id="summary" name="summary" rows="10" cols="75" form="usrform">{{ submit_dict.summary }}</textarea>
   </form>
 
-  <h2><span id="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</span></h2>
+  <h2><a class="anchor" name="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</a></h2>
   <p>
     Please describe the files included in your deposit.
     Below is the suggested format and examples are shown:<br><br>
@@ -128,8 +129,7 @@
     <textarea id="files" name="files" rows="10" cols="75" form="usrform">{{ submit_dict.files }}</textarea>
   </form>
 
-
-  <h2><span id="materials_head">7. Materials and Methods Section (OPTIONAL)</span></h2>
+  <h2><a class="anchor" name="materials_head">7. Materials and Methods Section (OPTIONAL)</a></h2>
   <p>
     Please describe the materials and methods needed for your deposit.
     Below are suggested formatting and examples:
@@ -167,7 +167,7 @@
     <textarea id="materials" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.materials }}</textarea>
   </form>
 
-  <h2><span id="contributors_head">8. Contributor Roles Section (OPTIONAL)</span></h2>
+  <h2><a class="anchor" name="contributors_head">8. Contributor Roles Section (OPTIONAL)</a></h2>
   <p>
     Fill in later<br>
   </p>
@@ -176,7 +176,7 @@
     <textarea id="contributors" name="materials" rows="10" cols="75" form="usrform">{{ submit_dict.contributors }}</textarea>
   </form>
 
-  <h2><span id="notes_head">9. Additional Notes (OPTIONAL)</span></h2>
+  <h2><a class="anchor" name="notes_head">9. Additional Notes (OPTIONAL)</a></h2>
   <p>
     Add any additional notes that are important in the text box below.
   </p>
