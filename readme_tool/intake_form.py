@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
 from pydantic import BaseModel
-from typing import Union
+from typing import Union, Optional
 
 from tinydb import TinyDB, Query
 
@@ -151,14 +151,18 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 
 @app.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
-                      citation: str = Form(''), summary: str = Form(''),
-                      files: str = Form(''), materials: str = Form(''),
-                      contributors: str = Form(''), notes: str = Form(''),
+                      citation: Optional[str] = Form(''),
+                      summary: Optional[str] = Form(''),
+                      files: Optional[str] = Form(''),
+                      materials: Optional[str] = Form(''),
+                      contributors: Optional[str] = Form(''),
+                      notes: Optional[str] = Form(''),
                       stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Submit data to incorporate in TinyDB database
 
+    \f
     :param article_id: Figshare `article_id`
     :param request: HTTP request
     :param citation: Form response for preferred citation data
