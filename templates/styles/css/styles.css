@@ -1,3 +1,9 @@
+/* Style for figshare metadata that is pre-populated */
+.fs_meta {
+    font-size:18px;
+    color: #808080; /* grey */
+    margin-left: 20px;
+}
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
   background-color: #eee;

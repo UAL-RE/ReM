@@ -40,9 +40,9 @@
   </p>
 
   <h2>1. Title of Your Deposit</h2>
-  <p style="font-size:18px;">
-    &nbsp;&nbsp;&nbsp;"{{ fs.title }}"
-  </p>
+  <div class="fs_meta">
+    "{{ fs.title }}"
+  </div>
 
   <br>----- <br>
   <i>Note: This information was retrieved from the information in your upload.<br>
@@ -51,11 +51,11 @@
 
   <h2><a class="anchor" name="cite_head">2. Preferred Citation (OPTIONAL)</a></h2>
 
-  <p style="font-size:18px;">
+  <div class="fs_meta">
   {% for cite_text in fs.preferred_citation %}
-    &nbsp;&nbsp;&nbsp;{{ cite_text }}<br>
+    {{ cite_text }}<br>
   {% endfor %}
-  </p>
+  </div>
 
   <br>----- <br>
   <i>Note: This is the ReDATA citation for your upload</i><br><br>
@@ -81,9 +81,9 @@
 
 
   <h2>3. License</h2>
-  <p style="font-size:18px;">
-    &nbsp;&nbsp;&nbsp;{{ fs.license.name }}
-  </p>
+  <div class="fs_meta">
+    {{ fs.license.name }}
+  </div>
 
   <br>----- <br>
   <i>Note: This information was retrieved from the information in your upload.<br>
@@ -95,15 +95,15 @@
     The DOI Link for your deposit will be the following and will go live once the deposit is published.<br>
     This cannot be changed/customized:</p>
 
-  <p style="font-size:18px;">
-    &nbsp;&nbsp;&nbsp;{{ fs.doi }}
-  </p>
+  <div class="fs_meta">
+    {{ fs.doi }}
+  </div>
 
   <h2><a class="anchor" name="summary_head">5. Summary (OPTIONAL)</a></h2>
 
-  <p style="font-size:18px;">
+  <div class="fs_meta">
   {{ fs.summary | safe}}
-  </p>
+  </div>
   <p>
     <br>
     ----- <br>
