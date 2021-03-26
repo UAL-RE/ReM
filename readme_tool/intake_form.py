@@ -151,9 +151,9 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 
 @app.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
-                      citation: str = Form(...), summary: str = Form(...),
-                      files: str = Form(...), materials: str = Form(...),
-                      contributors: str = Form(...), notes: str = Form(...),
+                      citation: str = Form(''), summary: str = Form(''),
+                      files: str = Form(''), materials: str = Form(''),
+                      contributors: str = Form(''), notes: str = Form(''),
                       stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
