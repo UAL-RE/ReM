@@ -143,15 +143,8 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
             ['citation', 'summary', 'files', 'materials', 'contributors', 'notes'], ''
         )
 
-    result = {'summary': 'Provide additional summary info',
-              'files': 'Provide your files',
-              'materials': 'Provide a description of your file',
-              'contributors': 'Provide list of contributors',
-              'notes': 'Provide additional notes'}
-
     return templates.TemplateResponse('intake.html',
                                       context={'request': request,
-                                               'result': result,
                                                'submit_dict': submit_dict,
                                                'fs': fs_metadata})
 
