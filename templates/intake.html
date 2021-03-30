@@ -41,7 +41,7 @@
 
   <h2>1. Title of Your Deposit</h2>
   <div class="fs_meta">
-    "{{ fs.title }}"
+    {{ fs.title }}
   </div>
 
   <br>----- <br>
@@ -50,7 +50,7 @@
   <a href="https://arizona.figshare.com/account/home" target="_blank">
     <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span></a><br><br>
 
-  <h2><a class="anchor" name="cite_head">2. Preferred Citation (OPTIONAL)</a></h2>
+  <h2><a class="anchor" name="cite_head">2. Preferred Citation (<i>Optional</i>)</a></h2>
 
   <div class="fs_meta">
   {% for cite_text in fs.preferred_citation %}
@@ -102,7 +102,7 @@
     {{ fs.doi }}
   </div>
 
-  <h2><a class="anchor" name="summary_head">5. Summary (OPTIONAL)</a></h2>
+  <h2><a class="anchor" name="summary_head">5. Summary (<i>Optional</i>)</a></h2>
 
   <div class="fs_meta">
   {{ fs.summary | safe}}
@@ -122,7 +122,7 @@
     <textarea id="summary" name="summary" rows="10" cols="75" form="form">{{ submit_dict.summary }}</textarea>
   </form>
 
-  <h2><a class="anchor" name="files_head">6. Files and Folders Section (OPTIONAL BUT HIGHLY RECOMMENDED)</a></h2>
+  <h2><a class="anchor" name="files_head">6. Files and Folders Section (<i>Optional but highly recommended</i>)</a></h2>
   <p>
     Please describe the files included in your deposit.
     Below is the suggested format and examples are shown:<br><br>
@@ -155,7 +155,7 @@
     <textarea id="files" name="files" rows="10" cols="75" form="form">{{ submit_dict.files }}</textarea>
   </form>
 
-  <h2><a class="anchor" name="materials_head">7. Materials and Methods Section (OPTIONAL)</a></h2>
+  <h2><a class="anchor" name="materials_head">7. Materials and Methods Section (<i>Optional</i>)</a></h2>
   <p>
     Please describe the materials and methods needed for your deposit.
     Below are suggested formatting and examples:
@@ -193,7 +193,7 @@
     <textarea id="materials" name="materials" rows="10" cols="75" form="form">{{ submit_dict.materials }}</textarea>
   </form>
 
-  <h2><a class="anchor" name="contributors_head">8. Contributor Roles Section (OPTIONAL)</a></h2>
+  <h2><a class="anchor" name="contributors_head">8. Contributor Roles Section (<i>Optional</i>)</a></h2>
   <p>
     Fill in later<br>
   </p>
@@ -202,7 +202,7 @@
     <textarea id="contributors" name="materials" rows="10" cols="75" form="form">{{ submit_dict.contributors }}</textarea>
   </form>
 
-  <h2><a class="anchor" name="notes_head">9. Additional Notes (OPTIONAL)</a></h2>
+  <h2><a class="anchor" name="notes_head">9. Additional Notes (<i>Optional</i>)</a></h2>
   <p>
     Add any additional notes that are important in the text box below.
   </p>
