@@ -15,6 +15,7 @@ Thank you! We received your README.txt metadata response for<br><br>
 <div class="fs_meta">
 	{{ fs_metadata.title }}
 </div>
+<br>
 
 Here are your responses to this form:<br>
 <button class="accordion">README.txt Metadata - Expand for details</button>
@@ -22,7 +23,7 @@ Here are your responses to this form:<br>
 	<table border="1">
 	{% for key in result %}
 	<tr>
-		<th>{{ key }}</th>
+		<th style="text-align:left">{{ fields[key] }}</th>
 		{% if result[key] == '' %}
 		<td>N/A</td>
 		{% else %}

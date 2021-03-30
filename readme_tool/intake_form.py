@@ -192,6 +192,15 @@ async def intake_post(article_id: int, request: Request,
         'notes': notes,
     }
 
+    fields = {
+        'citation': 'Preferred Citation',
+        'summary': 'Summary',
+        'files': 'Files and Folders',
+        'materials': 'Materials and Methods',
+        'contributors': 'Contributor Roles',
+        'notes': 'Notes',
+    }
+
     post_data = {'article_id': fs_metadata['article_id'], **result}
 
     try:
@@ -203,6 +212,7 @@ async def intake_post(article_id: int, request: Request,
     return templates.TemplateResponse('receive.html',
                                       context={'request': request,
                                                'result': result,
+                                               'fields': fields,
                                                'fs_metadata': fs_metadata,
                                                }
                                       )
