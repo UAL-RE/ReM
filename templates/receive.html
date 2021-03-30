@@ -2,15 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Submission - UA Research Data Repository README Form</title>
+    <title>Submitted</title>
 
 		<link rel="stylesheet" href="{{ url_for('templates', path='/styles/css/styles.css') }}">
 </head>
 
 <body>
-<h1>Submission - UA Research Data Repository README Form</h1>
+<h1>Submitted!</h1>
 
-Thank you for your response!<br><br>
+Thank you! We received your README.txt metadata response for<br><br>
+
+<div class="fs_meta">
+	{{ fs_metadata.title }}
+</div>
+
+Here are your responses to this form:<br>
+<button class="accordion">README.txt Metadata - Expand for details</button>
+<div class="panel">
+	<table border="1">
+	{% for key in result %}
+	<tr>
+		<th>{{ key }}</th>
+		{% if result[key] == '' %}
+		<td>N/A</td>
+		{% else %}
+		<td>{{ result[key]|safe }}</td>
+		{% endif %}
+	</tr>
+	{% endfor %}
+	</table>
+</div>
 
 Here are specific metadata that you submitted with your ReDATA upload<br>
 <button class="accordion">ReDATA Metadata - Expand for details</button>
@@ -25,18 +46,6 @@ Here are specific metadata that you submitted with your ReDATA upload<br>
 	</table>
 </div>
 
-Here are your responses to this form:<br>
-<button class="accordion">README.txt Metadata - Expand for details</button>
-<div class="panel">
-	<table border="1">
-	{% for key in result %}
-	<tr>
-		<th>{{ key }}</th>
-		<td>{{ result[key]|safe }}</td>
-	</tr>
-	{% endfor %}
-	</table>
-</div>
 
 <p>
 	If you wish to retake the survey, please click <a href="{{ request.url }}"><button>here</button></a>
