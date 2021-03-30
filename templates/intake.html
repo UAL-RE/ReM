@@ -249,11 +249,19 @@
   <form method="post">
     <textarea id="notes" name="notes" rows="10" cols="75" form="form">{{ submit_dict.notes }}</textarea>
   </form>
+  <br>
+  The following links will appear below your Additional Notes:
+  <div class="fs_meta">
+  {% for link in fs.references %}
+    - {{ link }}<br>
+  {% endfor %}
+  </div>
 
   <p>
+
   ----- <br>
-  <i>Note: This information was retrieved from the information in your upload. If you need to
-    change it, please do so within</i>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i>
   <a href="https://arizona.figshare.com/account/home" target="_blank">
     <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span>
   </a><br><br>
