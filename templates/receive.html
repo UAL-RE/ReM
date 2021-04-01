@@ -41,7 +41,21 @@ Here are specific metadata that you submitted with your ReDATA upload<br>
 	{% for key in fs_metadata %}
 	<tr>
 		<th>{{ key }}</th>
-		<td>{{ fs_metadata[key]|safe }}</td>
+		<td>
+		{% if key == 'preferred_citation' %}
+		{% for cite_text in fs_metadata[key] %}
+		{{ cite_text }}<br>
+		{% endfor %}
+		{% elif key == "references" %}
+		{% for reference in fs_metadata[key] %}
+		&nbsp;&nbsp;- {{ reference }}<br>
+		{% endfor %}
+		{% elif key == "license" %}
+	  {{ fs_metadata[key]['name'] |safe }}
+		{% else %}
+		{{ fs_metadata[key]|safe }}
+		{% endif %}
+		</td>
 	</tr>
 	{% endfor %}
 	</table>
