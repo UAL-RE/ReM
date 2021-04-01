@@ -24,8 +24,8 @@ body {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background: #ddd;
-  color: black;
+  background: #0C234B;
+  color: white;
 }
 
 /* Add a color to the active/current link */
@@ -47,3 +47,15 @@ body {
   height: 1500px;
   padding-top: 40px;
 }
+
+/*
+#logo {
+    float: left;
+}
+
+.navigation {
+  float: left;
+  list-style: none;
+  padding: 0;
+}
+*/
