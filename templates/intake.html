@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UA Research Data Repository README Form</title>
+
+  <link rel="stylesheet" href="{{ url_for('templates', path='/styles/css/topnav.css') }}">
+  <link rel="stylesheet" href="{{ url_for('templates', path='/styles/css/styles.css') }}">
+</head>
+
+<body>
+
+<div class="topnav">
+  <a href="#home">Overview</a>
+  <a href="#cite_head">Preferred Citation</a>
+  <a href="#summary_head">Summary</a>
+  <a href="#files_head">Files and Folders</a>
+  <a href="#materials_head">Materials and Methods</a>
+  <a href="#contributors_head">Contributor Roles</a>
+  <a href="#notes_head">Additional Notes</a>
+  <!--
+  <form method="post" id="form">
+    <input type="submit">
+  </form>
+  -->
+</div>
+
+<div class="main">
+  <img src="{{ url_for('templates', path='img/ReDATA_logo.png') }}" height="50px" style="padding-top: 20px;" \>
+
+  <h1><a class="anchor" name="home">UA Research Data Repository README Form</a></h1>
+
+  <p>
+    This form is used to obtain specific information about your dataset so we
+    can create a README.txt file.  The README.txt file will be included in your
+    deposit; it enables those who retrieve your data to understand and be able
+    to re-use the data.<br><br>
+
+    The README.txt file will automatically contain many of the information that
+    you provided when you uploaded your dataset.  This prevents errors and makes
+    it easier for you to focus on custom content.<br><br>
+
+    The flow of content is in the order as it will appear in the README.txt file.
+    Please leave a field empty if you feel that a section is correct as-is or is
+    not needed.
+  </p>
+
+  <h2>1. Title of Your Deposit</h2>
+  <div class="fs_meta">
+    {{ fs.title }}
+  </div>
+
+  <br>----- <br>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i>
+  <a href="https://arizona.figshare.com/account/home" target="_blank">
+    <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span></a><br><br>
+
+  <h2><a class="anchor" name="cite_head">2. Preferred Citation (<i>Optional</i>)</a></h2>
+
+  <div class="fs_meta">
+  {% for cite_text in fs.preferred_citation %}
+    {{ cite_text }}<br>
+  {% endfor %}
+  </div>
+
+  <br>----- <br>
+  <i>Note: This is the <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span>
+    citation for your upload</i><br><br>
+  If you have a preferred citation (e.g., journal publication) that you wish to use,<br>
+  please provide it below following the <b>DataCite format</b><br><br>
+
+  <b>Tip</b>: The <a href="https://citation.crosscite.org/" target="_blank">DOI Citation Formatter Tool</a>
+    can provide the correct format.<br>
+  <b>Note</b>: For journal-like publication, select "apa" for the formatting style
+
+  Please separate into <underline>four</underline> separate lines (i.e., carriage returns)<br>
+  <button class="accordion">Example</button>
+  <div class="panel">
+    Behroozi, Peter; Wechsler, Risa H; Hearin, Andrew P; Conroy, Charlie (2019).<br>
+    UniverseMachine: The correlation between galaxy growth and dark matter halo assembly from z=0−10.<br>
+    Monthly Notices of the Royal Astronomical Society, Volume 488, Issue 3, 3143-3194<br>
+    https://doi.org/10.1093/mnras/stz1182<br>
+  </div>
+
+  <form method="post">
+    <textarea id="citation" name="citation" rows="10" cols="75" form="form">{{ submit_dict.citation }}</textarea>
+  </form>
+
+
+  <h2>3. License</h2>
+  <div class="fs_meta">
+    {{ fs.license.name }}
+  </div>
+
+  <br>----- <br>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i>
+  <a href="https://arizona.figshare.com/account/home" target="_blank">
+    <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span></a><br><br>
+
+  <h2>4. Digital Object Identifier (DOI) Link</h2>
+  <p>
+    The DOI Link for your deposit will be the following and will go live once the deposit is published.<br>
+    This cannot be changed/customized:</p>
+
+  <div class="fs_meta">
+    {{ fs.doi }}
+  </div>
+
+  <h2><a class="anchor" name="summary_head">5. Summary (<i>Optional</i>)</a></h2>
+
+  <div class="fs_meta">
+  {{ fs.summary | safe}}
+  </div>
+  <p>
+    <br>
+    ----- <br>
+    <i>Note: This information was retrieved from the information in your upload under the Description field.<br>
+      If you need to change it, please do so within</i>
+    <a href="https://arizona.figshare.com/account/home" target="_blank">
+      <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span></a><br><br>
+    If you wish to append additional information to your summary, please use the text box below.<br>
+    The additional information will only appear in your README.txt file
+  </p>
+
+  <form method="post">
+    <textarea id="summary" name="summary" rows="10" cols="75" form="form">{{ submit_dict.summary }}</textarea>
+  </form>
+
+  <h2><a class="anchor" name="files_head">6. Files and Folders Section (<i>Optional but highly recommended</i>)</a></h2>
+  <p>
+    Please describe the files included in your deposit.
+    Below is the suggested format and examples are shown:<br><br>
+
+    #### Folder_1_Name.zip: Description of contents<br>
+    - file1 or set of related files: Purpose, contents, naming convention, etc.<br>
+    - file2 or set of related files: Purpose, contents, naming convention, etc.<br><br>
+
+    (Repeat as needed)<br>
+  </p>
+
+  <button class="accordion">Example of a folder description</button>
+  <div class="panel">
+    #### Young Adult song.zip: Individual audio files audio .wav files of
+    birdsong motifs from young male zebra finches.
+  </div>
+
+  <button class="accordion">Example for single files</button>
+  <div class="panel">
+    - example.wav: Example .wav file provided for Figshare preview.<br>
+    - data.csv: Dataset containing customized Public Use Microdata Sample (PUMS) definitions
+      used in our study that make U.S. Metropolitan Statistical Area (MSA) geographies comparable over time.
+  </div>
+  <br>
+
+  <br>
+  <b>Note:</b> These are examples. Your descriptions are not limited to the categories above.
+
+  <form method="post">
+    <textarea id="files" name="files" rows="10" cols="75" form="form">{{ submit_dict.files }}</textarea>
+  </form>
+
+  <h2><a class="anchor" name="materials_head">7. Materials and Methods Section (<i>Optional</i>)</a></h2>
+  <p>
+    Please describe the materials and methods needed for your deposit.
+    Below are suggested formatting and examples:
+
+    <ul>
+      <li>Software 1 (version number). Short description of how it is used.</li>
+      <li>Software 2 (version number). Short description of how it is used.</li>
+      <li>Instrument name/model, manufacturer. Short description of why it's needed.</li>
+    </ul>
+  </p>
+
+  <button class="accordion">Software Example</button>
+  <div class="panel">
+    - Python 3.7.5. Required libraries: pandas, numpy.
+  </div>
+
+  <br>
+  <button class="accordion">Media Instruments Examples</button>
+  <div class="panel">
+    - Audacity, Praat, etc. The .wav audio files can be played or opened in any of the above freeware programs or in most commercial audio software (e.g., Windows Media Player).
+    - Microsoft 365 PowerPoint. The slides are best viewed using PowerPoint.
+  </div>
+
+  <br>
+  <button class="accordion">Instrument Example</button>
+  <div class="panel">
+    - Low-cost double pendulum for high-quality data collection with open-source video tracking and analysis/Version 2, Michigan State University (https://data.mendeley.com/datasets/z4hvxjgtbz/2), This instrument is necessary for validating our robotics locomotion analysis
+  </div>
+  <br>
+
+  <br>
+  <b>Note</b>: Please recommend open-source software whenever possible.<br>
+
+  <form method="post">
+    <textarea id="materials" name="materials" rows="10" cols="75" form="form">{{ submit_dict.materials }}</textarea>
+  </form>
+
+  <h2><a class="anchor" name="contributors_head">8. Contributor Roles Section (<i>Optional</i>)</a></h2>
+  <p>
+    Please add the contributors to this deposit and their roles.  Please use the format specified below:<br><br>
+    FirstName1 LastName1, Affiliation: role1, role2, ...<br>
+    FirstName2 LastName2, Affiliation: role1, role2, ...<br>
+    FirstName3 LastName3, Affiliation: role3, role4, ...<br>
+    <br>
+
+    Authors can have any of the following 14 Contributor Roles:<br>
+    <ul>
+      <li>Conceptualization</li>
+      <li>Data curation</li>
+      <li>Formal Analysis</li>
+      <li>Funding acquisition</li>
+      <li>Investigation</li>
+      <li>Methodology</li>
+      <li>Project administration</li>
+      <li>Resources</li>
+      <li>Software</li>
+      <li>Supervision</li>
+      <li>Validation</li>
+      <li>Visualization</li>
+      <li>Writing – original draft</li>
+      <li>Writing – review & editing</li>
+    </ul>
+    <br>
+
+    These roles are defined by the <a href="http://credit.niso.org/">CRediT</a> taxonomy
+  </p>
+  <br>
+  <button class="accordion">Examples</button>
+  <div class="panel">
+    Lisa Monroe, University of Arizona: Conceptualization, Formal Analysis, Methodology, Project administration, Writing – original draft<br>
+    Jhon Smith, University of Arizona: Data curation, Funding acquisition, Investigation, Writing – original draft
+  </div>
+  <br>
+
+  <form method="post">
+    <textarea id="contributors" name="materials" rows="10" cols="75" form="form">{{ submit_dict.contributors }}</textarea>
+  </form>
+
+  <h2><a class="anchor" name="notes_head">9. Additional Notes (<i>Optional</i>)</a></h2>
+  <p>
+    Add any additional notes that are important in the text box below.
+  </p>
+
+  <form method="post">
+    <textarea id="notes" name="notes" rows="10" cols="75" form="form">{{ submit_dict.notes }}</textarea>
+  </form>
+  <br>
+  The following links will appear below your Additional Notes:
+  <div class="fs_meta">
+  {% for link in fs.references %}
+    - {{ link }}<br>
+  {% endfor %}
+  </div>
+
+  <p>
+
+  ----- <br>
+  <i>Note: This information was retrieved from the information in your upload.<br>
+    If you need to change it, please do so within</i>
+  <a href="https://arizona.figshare.com/account/home" target="_blank">
+    <span style="font-family:'Georgia'"><i>Re</i><b>DATA</b></span>
+  </a><br><br>
+  </p>
+
+  <form method="post" id="form">
+    <input type="submit">
+  </form>
+
+  <script src="{{ url_for('templates', path='styles/js/main.js') }}"></script>
+</div>
+
+</body>
+</html>
