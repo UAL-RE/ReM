@@ -1,9 +1,15 @@
 from shutil import copy
 import ast
+from starlette.staticfiles import StaticFiles
+
 from fastapi.testclient import TestClient
+from fastapi import FastAPI
 
-from readme_tool.intake_form import app, VersionModel, readme_url_path
+from readme_tool.intake_form import VersionModel, readme_url_path, router
 
+app = FastAPI()
+app.mount("/templates", StaticFiles(directory="templates"), name="templates")
+app.include_router(router)
 client = TestClient(app)
 
 article_id = 12966581

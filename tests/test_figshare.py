@@ -1,8 +1,11 @@
 from typing import Union
 from fastapi.testclient import TestClient
+from fastapi import FastAPI
 
-from readme_tool.figshare import app, api_version
+from readme_tool.figshare import api_version, router
 
+app = FastAPI()
+app.include_router(router)
 client = TestClient(app)
 
 article_id = 12966581
