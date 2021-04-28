@@ -4,8 +4,6 @@ import requests
 from fastapi import APIRouter, HTTPException
 # from pydantic import BaseModel
 
-api_version = 'v1'
-
 router = APIRouter()
 
 
@@ -36,7 +34,7 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
     return readme_dict
 
 
-@router.get(f'/api/{api_version}/figshare/'+'{article_id}')
+@router.get(f'/figshare/'+'{article_id}')
 def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPException]:
     """
     API call to retrieve Figshare metadata
@@ -66,7 +64,7 @@ def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPExcept
         return response.json()
 
 
-@router.get(f'/api/{api_version}/metadata/'+'{article_id}')
+@router.get(f'/metadata/'+'{article_id}')
 async def metadata_get(article_id: int, stage: bool = False) -> dict:
     """
     API call for README metadata based on Figshare response

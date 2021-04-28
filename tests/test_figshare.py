@@ -2,7 +2,7 @@ from typing import Union
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 
-from readme_tool.figshare import api_version, router
+from readme_tool.figshare import router
 
 app = FastAPI()
 app.include_router(router)
@@ -16,7 +16,7 @@ value_400 = [-1, 0]
 
 def test_figshare_get():
     def _client_get(article_id0: Union[int, str] = '', stage: bool = False):
-        return client.get(f'/api/{api_version}/figshare/'
+        return client.get(f'/figshare/'
                           f'{article_id0}?stage={stage}')
 
     # Production
@@ -58,7 +58,7 @@ def test_figshare_get():
 
 def test_metadata_get():
     def _client_get(article_id0: Union[int, str] = '', stage: bool = False):
-        return client.get(f'/api/{api_version}/metadata/'
+        return client.get(f'/metadata/'
                           f'{article_id0}?stage={stage}')
 
     # Production
