@@ -1,6 +1,5 @@
-from fastapi import FastAPI, Request, Form, HTTPException
+from fastapi import APIRouter, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 
 from pydantic import BaseModel
 from typing import Union, Optional
@@ -14,10 +13,8 @@ api_version = "v1.0.0"
 readme_url_path = '/readme_tool/'
 tinydb_file = 'intake.json'
 
-app = FastAPI()
+router = APIRouter()
 templates = Jinja2Templates(directory='templates/')
-
-app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 
 q = Query()  # For TinyDB query
 
@@ -37,13 +34,13 @@ class VersionModel(BaseModel):
     rem_web_api_version: str = api_version
 
 
-@app.get('/version/')
+@router.get('/version/')
 async def get_version() -> VersionModel:
     """Retrieve version metadata"""
     return VersionModel()
 
 
-@app.get(readme_url_path + 'database/')
+@router.get(readme_url_path + 'database/')
 async def get_db(db_file: str = tinydb_file) -> TinyDB:
     """Retrieve TinyDB README database
 
@@ -56,7 +53,7 @@ async def get_db(db_file: str = tinydb_file) -> TinyDB:
     return db
 
 
-@app.get(readme_url_path + 'database/read/{article_id}')
+@router.get(readme_url_path + 'database/read/{article_id}')
 async def get_data(article_id: int, index: bool = False,
                    db_file: str = tinydb_file) -> Union[dict, int]:
     """Retrieve record from TinyDB README database
@@ -83,7 +80,7 @@ async def get_data(article_id: int, index: bool = False,
         return db0.get(article_query).doc_id
 
 
-@app.post(readme_url_path + 'database/create')
+@router.post(readme_url_path + 'database/create')
 async def add_data(response: IntakeData, db_file: str = tinydb_file):
     """
     Add record to TinyDB README database
@@ -96,7 +93,7 @@ async def add_data(response: IntakeData, db_file: str = tinydb_file):
     db0.insert(response.dict())
 
 
-@app.post(readme_url_path + 'database/update/{doc_id}')
+@router.post(readme_url_path + 'database/update/{doc_id}')
 async def update_data(doc_id: int, response: IntakeData,
                       db_file: str = tinydb_file):
     """
@@ -114,7 +111,7 @@ async def update_data(doc_id: int, response: IntakeData,
     return db0
 
 
-@app.get(readme_url_path + 'form/{article_id}')
+@router.get(readme_url_path + 'form/{article_id}')
 async def read_form(article_id: int, request: Request, stage: bool = False,
                     db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
@@ -149,7 +146,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
                                                'fs': fs_metadata})
 
 
-@app.post(readme_url_path + 'form/{article_id}')
+@router.post(readme_url_path + 'form/{article_id}')
 async def intake_post(article_id: int, request: Request,
                       citation: Optional[str] = Form(''),
                       summary: Optional[str] = Form(''),
