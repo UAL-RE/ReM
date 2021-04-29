@@ -112,8 +112,8 @@ async def update_data(doc_id: int, response: IntakeData,
 
 
 @router.get('/form/{article_id}')
-async def read_form(article_id: int, request: Request, stage: bool = False,
-                    db_file: str = tinydb_file) \
+async def get_form(article_id: int, request: Request, stage: bool = False,
+                   db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Return README form with Figshare metadata and README metadata if available
@@ -128,7 +128,7 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
     :return: HTML content through ``jinja2`` template
     """
     try:
-        fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+        fs_metadata = await figshare.get_readme_metadata(article_id, stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})
@@ -147,14 +147,14 @@ async def read_form(article_id: int, request: Request, stage: bool = False,
 
 
 @router.post('/form/{article_id}')
-async def intake_post(article_id: int, request: Request,
-                      citation: Optional[str] = Form(''),
-                      summary: Optional[str] = Form(''),
-                      files: Optional[str] = Form(''),
-                      materials: Optional[str] = Form(''),
-                      contributors: Optional[str] = Form(''),
-                      notes: Optional[str] = Form(''),
-                      stage: bool = False, db_file: str = tinydb_file) \
+async def post_form(article_id: int, request: Request,
+                    citation: Optional[str] = Form(''),
+                    summary: Optional[str] = Form(''),
+                    files: Optional[str] = Form(''),
+                    materials: Optional[str] = Form(''),
+                    contributors: Optional[str] = Form(''),
+                    notes: Optional[str] = Form(''),
+                    stage: bool = False, db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Submit data to incorporate in TinyDB database
@@ -175,7 +175,7 @@ async def intake_post(article_id: int, request: Request,
     """
 
     try:
-        fs_metadata = await figshare.metadata_get(article_id, stage=stage)
+        fs_metadata = await figshare.get_readme_metadata(article_id, stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})

@@ -35,7 +35,7 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
 
 @router.get(f'/figshare/'+'{article_id}')
-def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPException]:
+def get_figshare(article_id: int, stage: bool = False) -> Union[dict, HTTPException]:
     """
     API call to retrieve Figshare metadata
 
@@ -65,7 +65,7 @@ def figshare_get(article_id: int, stage: bool = False) -> Union[dict, HTTPExcept
 
 
 @router.get(f'/metadata/'+'{article_id}')
-async def metadata_get(article_id: int, stage: bool = False) -> dict:
+async def get_readme_metadata(article_id: int, stage: bool = False) -> dict:
     """
     API call for README metadata based on Figshare response
 
@@ -78,7 +78,7 @@ async def metadata_get(article_id: int, stage: bool = False) -> dict:
     """
 
     try:
-        figshare_dict = figshare_get(article_id, stage=stage)
+        figshare_dict = get_figshare(article_id, stage=stage)
         readme_dict = figshare_metadata_readme(figshare_dict)
         return readme_dict
     except HTTPException as e:
