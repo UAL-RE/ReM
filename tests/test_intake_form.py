@@ -5,7 +5,7 @@ from starlette.staticfiles import StaticFiles
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 
-from readme_tool.intake_form import VersionModel, readme_url_path, router
+from readme_tool.intake_form import VersionModel, router
 
 app = FastAPI()
 app.mount("/templates", StaticFiles(directory="templates"), name="templates")
@@ -36,14 +36,14 @@ def test_get_version():
 
 
 def test_get_db():
-    url = readme_url_path + f'database/?db_file={test_dup_file}'
+    url = f'/database/?db_file={test_dup_file}'
     response = client.get(url)
     assert response.status_code == 200
     assert isinstance(response.content, bytes)
 
 
 def test_get_data():
-    url = readme_url_path + 'database/read'
+    url = f'/database/read'
 
     # Check for default data
     response = client.get(
@@ -74,7 +74,7 @@ def test_get_data():
 
 
 def test_add_data():
-    url = readme_url_path + f'database/create?db_file={test_dup_file}'
+    url = f'/database/create?db_file={test_dup_file}'
     post_data = {
         'article_id': 87654321,
         'citation': 'Preferred citation data for add',
@@ -92,7 +92,7 @@ def test_add_data():
 
 
 def test_update_data():
-    url = readme_url_path + f'database/update/{doc_id}?db_file={test_dup_file}'
+    url = f'/database/update/{doc_id}?db_file={test_dup_file}'
     post_data = {
         'article_id': article_id,
         'citation': 'Preferred citation data for add',
@@ -109,7 +109,7 @@ def test_update_data():
 def test_read_form():
     # Test for existing data (article_id), non-existing data (new_article_id2)
     for a_id in [article_id, new_article_id2]:
-        url = readme_url_path + f'form/{a_id}?db_file={test_dup_file}'
+        url = f'/form/{a_id}?db_file={test_dup_file}'
         response = client.get(url)
         assert response.status_code == 200
         content = response.content
@@ -118,7 +118,7 @@ def test_read_form():
         assert 'html' in content.decode()
 
     # 404 check
-    url = readme_url_path + f'form/{article_id_404}?db_file={test_dup_file}'
+    url = f'/form/{article_id_404}?db_file={test_dup_file}'
     response = client.get(url)
     content = response.content
     assert '404' in content.decode()
@@ -135,7 +135,7 @@ def test_intake_post():
     }
 
     for a_id in [article_id, new_article_id2]:
-        url = readme_url_path + f'form/{a_id}?db_file={test_dup_file}'
+        url = f'/form/{a_id}?db_file={test_dup_file}'
 
         response = client.post(url, data=post_data)  # Use data for Form data
         assert response.status_code == 200
@@ -145,7 +145,7 @@ def test_intake_post():
         assert 'html' in content.decode()
 
     # 404 check
-    url = readme_url_path + f'form/{article_id_404}?db_file={test_dup_file}'
+    url = f'/form/{article_id_404}?db_file={test_dup_file}'
     response = client.post(url, data=post_data)
     content = response.content
     assert '404' in content.decode()
