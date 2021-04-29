@@ -10,7 +10,6 @@ from . import __version__ as rem_version
 from . import figshare
 
 api_version = "v1.0.0"
-# readme_url_path = '/readme_tool/'
 tinydb_file = 'intake.json'
 
 router = APIRouter()
