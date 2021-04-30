@@ -110,15 +110,17 @@ async def update_data(doc_id: int, response: IntakeData,
     return db0
 
 
-@router.get('/form/{article_id}')
-async def get_form(article_id: int, request: Request, stage: bool = False,
+@router.get('/form/{article_id}/{curation_id}')
+async def get_form(article_id: int, curation_id: int,
+                   request: Request, stage: bool = False,
                    db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Return README form with Figshare metadata and README metadata if available
 
     \f
-    :param article_id: Figshare `article_id`
+    :param article_id: Figshare ``article_id``
+    :param curation_id: Figshare ``curation_id``
     :param request: HTTP request for template
     :param stage: Figshare stage or production API.
                   Stage is only available for Figshare institutions
@@ -127,7 +129,9 @@ async def get_form(article_id: int, request: Request, stage: bool = False,
     :return: HTML content through ``jinja2`` template
     """
     try:
-        fs_metadata = await figshare.get_readme_metadata(article_id, stage=stage)
+        fs_metadata = await figshare.get_readme_metadata(article_id,
+                                                         curation_id,
+                                                         stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})
@@ -145,8 +149,8 @@ async def get_form(article_id: int, request: Request, stage: bool = False,
                                                'fs': fs_metadata})
 
 
-@router.post('/form/{article_id}')
-async def post_form(article_id: int, request: Request,
+@router.post('/form/{article_id}/{curation_id}')
+async def post_form(article_id: int, curation_id: int, request: Request,
                     citation: Optional[str] = Form(''),
                     summary: Optional[str] = Form(''),
                     files: Optional[str] = Form(''),
@@ -160,6 +164,7 @@ async def post_form(article_id: int, request: Request,
 
     \f
     :param article_id: Figshare `article_id`
+    :param curation_id: Figshare ``curation_id``
     :param request: HTTP request
     :param citation: Form response for preferred citation data
     :param summary: Form response for summary data
@@ -174,7 +179,9 @@ async def post_form(article_id: int, request: Request,
     """
 
     try:
-        fs_metadata = await figshare.get_readme_metadata(article_id, stage=stage)
+        fs_metadata = await figshare.get_readme_metadata(article_id,
+                                                         curation_id,
+                                                         stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})

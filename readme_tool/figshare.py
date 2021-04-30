@@ -1,9 +1,11 @@
-from typing import Union
+from typing import Union, Optional
 import requests
 
 from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
+
+api_key: Optional[str] = None
 
 
 def figshare_metadata_readme(figshare_dict: dict) -> dict:
@@ -14,6 +16,10 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
     :return: README metadata based on Figshare response
     """
+    if 'item' in figshare_dict:
+        print("figshare_metadata_readme: Using curation responses")
+        figshare_dict = figshare_dict['item']
+
     single_str_citation = figshare_dict['citation']
 
     # Handle period in author list.  Assume no period in dataset title
@@ -33,13 +39,15 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
     return readme_dict
 
 
-@router.get(f'/figshare/'+'{article_id}')
-def get_figshare(article_id: int, stage: bool = False) -> Union[dict, HTTPException]:
+@router.get('/figshare/{article_id}/{curation_id}')
+def get_figshare(article_id: int, curation_id: int,
+                 stage: bool = False) -> Union[dict, HTTPException]:
     """
     API call to retrieve Figshare metadata
 
     \f
     :param article_id: Figshare article ID
+    :param curation_id: Figshare curation ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
 
@@ -51,9 +59,14 @@ def get_figshare(article_id: int, stage: bool = False) -> Union[dict, HTTPExcept
     else:
         base_url = "https://api.figsh.com"
 
-    url = f"{base_url}/v2/articles/{article_id}"
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'token {api_key}'
+    }
 
-    response = requests.get(url)
+    url = f"{base_url}/v2/account/institution/review/{curation_id}"
+
+    response = requests.get(url, headers=headers)
     if response.status_code != 200:
         raise HTTPException(
             status_code=response.status_code,
@@ -63,13 +76,15 @@ def get_figshare(article_id: int, stage: bool = False) -> Union[dict, HTTPExcept
         return response.json()
 
 
-@router.get(f'/metadata/'+'{article_id}')
-async def get_readme_metadata(article_id: int, stage: bool = False) -> dict:
+@router.get('/metadata/{article_id}/{curation_id}')
+async def get_readme_metadata(article_id: int, curation_id: int,
+                              stage: bool = False) -> dict:
     """
     API call for README metadata based on Figshare response
 
     \f
     :param article_id: Figshare article ID
+    :param curation_id: Figshare curation ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
 
@@ -77,7 +92,7 @@ async def get_readme_metadata(article_id: int, stage: bool = False) -> dict:
     """
 
     try:
-        figshare_dict = get_figshare(article_id, stage=stage)
+        figshare_dict = get_figshare(article_id, curation_id, stage=stage)
         readme_dict = figshare_metadata_readme(figshare_dict)
         return readme_dict
     except HTTPException as e:
