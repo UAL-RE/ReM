@@ -17,9 +17,16 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
     :return: README metadata based on Figshare response
     """
+
+    readme_dict = {}
+
     if 'item' in figshare_dict:
         print("figshare_metadata_readme: Using curation responses")
+        readme_dict['article_id'] = figshare_dict['item']['id']
+        readme_dict['curation_id'] = figshare_dict['id']
         figshare_dict = figshare_dict['item']
+    else:
+        readme_dict['article_id'] = figshare_dict['id']
 
     single_str_citation = figshare_dict['citation']
 
@@ -27,8 +34,7 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
     author_list = ([single_str_citation.split('):')[0] + ').'])
     author_list += [str_row + '.' for str_row in single_str_citation.split('): ')[1].split('. ')]
 
-    readme_dict = {
-        'article_id': figshare_dict['id'],
+    readme_dict.update({
         'title': figshare_dict['title'],
         'description': figshare_dict['description'],
         'doi': f"https://doi.org/{figshare_dict['doi']}",
@@ -36,7 +42,7 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
         'license': figshare_dict['license'],
         'summary': figshare_dict['description'],
         'references': figshare_dict['references'],
-    }
+    })
     return readme_dict
 
 

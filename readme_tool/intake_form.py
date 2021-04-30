@@ -20,6 +20,7 @@ q = Query()  # For TinyDB query
 
 class IntakeData(BaseModel):
     article_id: int
+    curation_id: int = None
     citation: str = ''
     summary: str = ''
     files: str = ''
@@ -204,7 +205,10 @@ async def post_form(article_id: int, curation_id: int, request: Request,
         'notes': 'Notes',
     }
 
-    post_data = {'article_id': fs_metadata['article_id'], **result}
+    post_data = {
+        'article_id': fs_metadata['article_id'],
+        'curation_id': fs_metadata['curation_id'],
+        **result}
 
     try:
         doc_id = await get_data(article_id, index=True, db_file=db_file)
