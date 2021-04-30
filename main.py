@@ -25,9 +25,9 @@ def configure_routing():
 
 def configure_api():
     figshare_api_key = getenv('FIGSHARE_API_KEY')
-    if not figshare_api_key:
-        print("WARNING: FIGSHARE_API_KEY not set as ENVIRONMENT variable")
+    figshare_stage_api_key = getenv('FIGSHARE_STAGE_API_KEY')
 
+    if not figshare_api_key or not figshare_stage_api_key:
         settings_file = 'settings.json'
         file = Path(settings_file).absolute()
         if not file.exists():
@@ -37,11 +37,25 @@ def configure_api():
 
         with open(file) as fin:
             settings = json.load(fin)
-            figshare_api_key = settings.get('api_key')
+
+    if not figshare_api_key:
+        print("WARNING: FIGSHARE_API_KEY not set as ENV variable. "
+              "Obtaining from settings.json")
+
+        figshare_api_key = settings.get('figshare_api_key')
     else:
-        print("FIGSHARE_API_KEY set as ENVIRONMENT variable")
+        print("FIGSHARE_API_KEY set as ENV variable.")
+
+    if not figshare_stage_api_key:
+        print("WARNING: FIGSHARE_STAGE_API_KEY not set as ENV variable. "
+              "Obtaining from settings.json")
+
+        figshare_stage_api_key = settings.get('figshare_stage_api_key')
+    else:
+        print("FIGSHARE_API_KEY set as ENV variable")
 
     figshare.api_key = figshare_api_key
+    figshare.stage_api_key = figshare_stage_api_key
 
 
 if __name__ == "__main__":

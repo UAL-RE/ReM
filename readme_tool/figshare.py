@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException
 router = APIRouter()
 
 api_key: Optional[str] = None
+stage_api_key: Optional[str] = None
 
 
 def figshare_metadata_readme(figshare_dict: dict) -> dict:
@@ -61,7 +62,7 @@ def get_figshare(article_id: int, curation_id: int,
 
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'token {api_key}'
+        'Authorization': f'token {api_key if not stage else stage_api_key}'
     }
 
     url = f"{base_url}/v2/account/institution/review/{curation_id}"
