@@ -1,0 +1,4 @@
+{
+  "api_key": "YOUR API KEY for Figshare production, api.figshare.com",
+  "action": "copy this to settings.json with real values or save an environment called FIGSHARE_API_KEY"
+}
