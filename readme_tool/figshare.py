@@ -32,7 +32,8 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
 
     # Handle period in author list.  Assume no period in dataset title
     author_list = ([single_str_citation.split('):')[0] + ').'])
-    author_list += [str_row + '.' for str_row in single_str_citation.split('): ')[1].split('. ')]
+    author_list += [str_row + '.' for str_row in
+                    single_str_citation.split('): ')[1].split('. ')]
 
     readme_dict.update({
         'title': figshare_dict['title'],
