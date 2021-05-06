@@ -120,7 +120,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
                     return r_json
                 else:
                     raise HTTPException(
-                        status_code=response.status_code,
+                        status_code=404,
                         detail=f'No valid pending review for {article_id}'
                     )
             else:
