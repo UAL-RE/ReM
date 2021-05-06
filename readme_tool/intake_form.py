@@ -115,6 +115,7 @@ async def update_data(doc_id: int, response: IntakeData,
 async def get_form(article_id: int, request: Request,
                    curation_id: Optional[int] = None,
                    stage: bool = False,
+                   allow_approved: bool = False,
                    db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
@@ -126,14 +127,16 @@ async def get_form(article_id: int, request: Request,
     :param request: HTTP request for template
     :param stage: Figshare stage or production API.
                   Stage is only available for Figshare institutions
+    :param allow_approved: Return 200 responses even if curation is not pending
     :param db_file: JSON filename for TinyDB database
 
     :return: HTML content through ``jinja2`` template
     """
     try:
-        fs_metadata = await figshare.get_readme_metadata(article_id,
-                                                         curation_id=curation_id,
-                                                         stage=stage)
+        fs_metadata = await \
+            figshare.get_readme_metadata(article_id, curation_id=curation_id,
+                                         stage=stage,
+                                         allow_approved=allow_approved)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})
@@ -160,7 +163,9 @@ async def post_form(article_id: int, request: Request,
                     materials: Optional[str] = Form(''),
                     contributors: Optional[str] = Form(''),
                     notes: Optional[str] = Form(''),
-                    stage: bool = False, db_file: str = tinydb_file) \
+                    stage: bool = False,
+                    allow_approved: bool = False,
+                    db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
     Submit data to incorporate in TinyDB database
@@ -177,14 +182,16 @@ async def post_form(article_id: int, request: Request,
     :param notes: Form response for additional notes data
     :param stage: Figshare stage or production API.
                   Stage is only available for Figshare institutions
+    :param allow_approved: Return 200 responses even if curation is not pending
     :param db_file: JSON filename for TinyDB database
     :return: HTML content through ``jinja2`` template
     """
 
     try:
-        fs_metadata = await figshare.get_readme_metadata(article_id,
-                                                         curation_id=curation_id,
-                                                         stage=stage)
+        fs_metadata = await \
+            figshare.get_readme_metadata(article_id, curation_id=curation_id,
+                                         stage=stage,
+                                         allow_approved=allow_approved)
     except HTTPException:
         return templates.TemplateResponse('404.html',
                                           context={'request': request})
