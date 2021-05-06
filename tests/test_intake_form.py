@@ -13,6 +13,7 @@ app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 app.include_router(intake_form.router)
 client = TestClient(app)
 
+# Production test (published)
 article_id = 12966581
 curation_id = 540005
 
@@ -143,7 +144,7 @@ def test_read_form(figshare_api_key, figshare_stage_api_key):
     url = f'/form/{article_id_404}/'
     response = client.get(url, params=params)
     content = response.content
-    assert '404' in content.decode()
+    assert '404' in content.decode()  # From FastAPI
 
 
 def test_intake_post(figshare_api_key, figshare_stage_api_key):
@@ -187,4 +188,4 @@ def test_intake_post(figshare_api_key, figshare_stage_api_key):
     url = f'/form/{article_id_404}/'
     response = client.post(url, data=post_data, params=params)
     content = response.content
-    assert '404' in content.decode()
+    assert '404' in content.decode()  # From FastAPI
