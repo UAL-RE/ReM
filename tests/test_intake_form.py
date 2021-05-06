@@ -121,7 +121,8 @@ def test_read_form(figshare_api_key, figshare_stage_api_key):
     c_list = [curation_id, new_curation_id2]
 
     for a_id, c_id in zip(a_list, c_list):
-        url = f'/form/{a_id}/{c_id}?db_file={test_dup_file}'
+
+        url = f'/form/{a_id}?curation_id={c_id}&db_file={test_dup_file}'
         response = client.get(url)
         assert response.status_code == 200
         content = response.content
@@ -130,7 +131,7 @@ def test_read_form(figshare_api_key, figshare_stage_api_key):
         assert 'html' in content.decode()
 
     # 404 check
-    url = f'/form/{article_id_404}/{curation_id_404}?db_file={test_dup_file}'
+    url = f'/form/{article_id_404}?curation_id={curation_id_404}&db_file={test_dup_file}'
     response = client.get(url)
     content = response.content
     assert '404' in content.decode()
@@ -154,7 +155,7 @@ def test_intake_post(figshare_api_key, figshare_stage_api_key):
     }
 
     for a_id, c_id in zip(a_list, c_list):
-        url = f'/form/{a_id}/{c_id}?db_file={test_dup_file}'
+        url = f'/form/{a_id}/?curation_id={c_id}&db_file={test_dup_file}'
 
         response = client.post(url, data=post_data)  # Use data for Form data
         assert response.status_code == 200
@@ -164,7 +165,7 @@ def test_intake_post(figshare_api_key, figshare_stage_api_key):
         assert 'html' in content.decode()
 
     # 404 check
-    url = f'/form/{article_id_404}/{curation_id_404}?db_file={test_dup_file}'
+    url = f'/form/{article_id_404}/?curation_id={curation_id_404}&db_file={test_dup_file}'
     response = client.post(url, data=post_data)
     content = response.content
     assert '404' in content.decode()

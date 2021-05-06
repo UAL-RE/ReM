@@ -21,28 +21,39 @@ value_400 = [-1, 0]
 
 def test_figshare_get(figshare_api_key, figshare_stage_api_key):
     def _client_get(article_id0: Union[int, str] = '',
-                    curation_id0: Union[int, str] = '',
-                    stage: bool = False):
-        return client.get(f'/figshare/'
-                          f'{article_id0}/{curation_id0}?stage={stage}')
+                    curation_id0: Union[int] = None,
+                    stage: bool = False,
+                    allow_approved: bool = True):
+        params = {
+            'curation_id': curation_id0,
+            'stage': stage,
+            'allow_approved': allow_approved
+        }
+        return client.get(f'/figshare/{article_id0}', params=params)
 
     figshare.api_key = figshare_api_key
     figshare.stage_api_key = figshare_stage_api_key
 
     # Production
     ############
-    response = _client_get(article_id, curation_id)
+    response = _client_get(article_id, curation_id0=curation_id)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == article_id
     assert response.json()['id'] == curation_id
+
+    # Check case without curation_id specification.
+    # This is published, so no pending
+    response = _client_get(article_id, allow_approved=False)
+    assert response.status_code == 404
+    assert isinstance(response.json(), dict)
 
     # Check for incorrect entries with prod endpoint
     response = _client_get(stage_article_id)
     assert response.status_code == 404
 
     for i in value_400:
-        response = _client_get(i, i)
+        response = _client_get(i, curation_id0=i)
         assert response.status_code == 400
 
     response = _client_get()
@@ -50,18 +61,19 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
 
     # Stage
     #######
-    response = _client_get(stage_article_id, stage_curation_id, stage=True)
+    response = _client_get(stage_article_id, curation_id0=stage_curation_id,
+                           stage=True)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == stage_article_id
     assert response.json()['id'] == stage_curation_id
 
     # Check for incorrect entries with stage endpoint
-    response = _client_get(article_id, curation_id, stage=True)
+    response = _client_get(article_id, curation_id0=curation_id, stage=True)
     assert response.status_code == 404
 
     for i in value_400:
-        response = _client_get(i, i, stage=True)
+        response = _client_get(i, curation_id0=i, stage=True)
         assert response.status_code == 400
 
     response = _client_get(stage=True)
@@ -70,17 +82,22 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
 
 def test_metadata_get(figshare_api_key, figshare_stage_api_key):
     def _client_get(article_id0: Union[int, str] = '',
-                    curation_id0: Union[int, str] = '',
-                    stage: bool = False):
-        return client.get(f'/metadata/'
-                          f'{article_id0}/{curation_id0}?stage={stage}')
+                    curation_id0: Union[int, str] = None,
+                    stage: bool = False,
+                    allow_approved: bool = True):
+        params = {
+            'curation_id': curation_id0,
+            'stage': stage,
+            'allow_approved': allow_approved
+        }
+        return client.get(f'/metadata/{article_id0}', params=params)
 
     figshare.api_key = figshare_api_key
     figshare.stage_api_key = figshare_stage_api_key
 
     # Production
     ############
-    response = _client_get(article_id, curation_id)
+    response = _client_get(article_id, curation_id0=curation_id)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == article_id
@@ -90,7 +107,7 @@ def test_metadata_get(figshare_api_key, figshare_stage_api_key):
     assert response.status_code == 404
 
     for i in value_400:
-        response = _client_get(i, i)
+        response = _client_get(i, curation_id0=i)
         assert response.status_code == 400
 
     response = _client_get()
@@ -98,19 +115,19 @@ def test_metadata_get(figshare_api_key, figshare_stage_api_key):
 
     # Stage
     #######
-    response = _client_get(stage_article_id, stage_curation_id,
+    response = _client_get(stage_article_id, curation_id0=stage_curation_id,
                            stage=True)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == stage_article_id
 
     # Check for incorrect entries with stage endpoint
-    response = _client_get(article_id, curation_id,
+    response = _client_get(article_id, curation_id0=curation_id,
                            stage=True)
     assert response.status_code == 404
 
     for i in value_400:
-        response = _client_get(i, i, stage=True)
+        response = _client_get(i, curation_id0=i, stage=True)
         assert response.status_code == 400
 
     response = _client_get(stage=True)

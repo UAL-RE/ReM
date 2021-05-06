@@ -47,9 +47,10 @@ def figshare_metadata_readme(figshare_dict: dict) -> dict:
     return readme_dict
 
 
-@router.get('/figshare/{article_id}/{curation_id}')
-def get_figshare(article_id: int, curation_id: int,
-                 stage: bool = False) -> Union[dict, HTTPException]:
+@router.get('/figshare/{article_id}/')
+def get_figshare(article_id: int, curation_id: Optional[int] = None,
+                 stage: bool = False,
+                 allow_approved: bool = False) -> Union[dict, HTTPException]:
     """
     API call to retrieve Figshare metadata
 
@@ -58,7 +59,7 @@ def get_figshare(article_id: int, curation_id: int,
     :param curation_id: Figshare curation ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
-
+    :param allow_approved: Return 200 responses even if curation is not pending
     :return: Figshare API response
     """
 
@@ -72,21 +73,65 @@ def get_figshare(article_id: int, curation_id: int,
         'Authorization': f'token {api_key if not stage else stage_api_key}'
     }
 
-    url = f"{base_url}/v2/account/institution/review/{curation_id}"
+    curation_url = f"{base_url}/v2/account/institution/review"
 
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        raise HTTPException(
-            status_code=response.status_code,
-            detail=response.json(),
-        )
-    else:
-        return response.json()
+    if curation_id is None:
+        url = f"{base_url}/v2/account/institution/reviews"
+        params = {
+            'offset': 0,
+            'limit': 1000,
+            'article_id': article_id
+        }
+
+        if not allow_approved:
+            params['status'] = 'pending'
+
+        curation_response = requests.get(url, headers=headers, params=params)
+        if curation_response.status_code != 200:
+            raise HTTPException(
+                status_code=curation_response.status_code,
+                detail=curation_response.json(),
+            )
+        else:
+            curation_json = curation_response.json()
+            if len(curation_json) != 0:
+                print(f"Retrieved pending curation_id for {article_id}: "
+                      f"{curation_json[0]['id']}")
+                curation_id = curation_json[0]['id']
+            else:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f'No valid {"pending" if allow_approved else ""} review for {article_id}'
+                )
+
+    if curation_id is not None:
+        url = f"{curation_url}/{curation_id}"
+
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=response.json(),
+            )
+        else:
+            r_json = response.json()
+            if not allow_approved:
+                if r_json['status'] == 'pending':
+                    return r_json
+                else:
+                    raise HTTPException(
+                        status_code=response.status_code,
+                        detail=f'No valid pending review for {article_id}'
+                    )
+            else:
+                return r_json
 
 
-@router.get('/metadata/{article_id}/{curation_id}')
-async def get_readme_metadata(article_id: int, curation_id: int,
-                              stage: bool = False) -> dict:
+@router.get('/metadata/{article_id}/')
+async def get_readme_metadata(article_id: int,
+                              curation_id: Optional[int] = None,
+                              stage: bool = False,
+                              allow_approved: bool = False) -> dict:
     """
     API call for README metadata based on Figshare response
 
@@ -95,12 +140,15 @@ async def get_readme_metadata(article_id: int, curation_id: int,
     :param curation_id: Figshare curation ID
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
+    :param allow_approved: Return 200 responses even if curation is not pending
 
     :return: README metadata API response
     """
 
     try:
-        figshare_dict = get_figshare(article_id, curation_id, stage=stage)
+        figshare_dict = get_figshare(article_id, curation_id=curation_id,
+                                     stage=stage,
+                                     allow_approved=allow_approved)
         readme_dict = figshare_metadata_readme(figshare_dict)
         return readme_dict
     except HTTPException as e:

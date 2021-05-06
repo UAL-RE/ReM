@@ -111,9 +111,10 @@ async def update_data(doc_id: int, response: IntakeData,
     return db0
 
 
-@router.get('/form/{article_id}/{curation_id}')
-async def get_form(article_id: int, curation_id: int,
-                   request: Request, stage: bool = False,
+@router.get('/form/{article_id}/')
+async def get_form(article_id: int, request: Request,
+                   curation_id: Optional[int] = None,
+                   stage: bool = False,
                    db_file: str = tinydb_file) \
         -> templates.TemplateResponse:
     """
@@ -131,7 +132,7 @@ async def get_form(article_id: int, curation_id: int,
     """
     try:
         fs_metadata = await figshare.get_readme_metadata(article_id,
-                                                         curation_id,
+                                                         curation_id=curation_id,
                                                          stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
@@ -150,8 +151,9 @@ async def get_form(article_id: int, curation_id: int,
                                                'fs': fs_metadata})
 
 
-@router.post('/form/{article_id}/{curation_id}')
-async def post_form(article_id: int, curation_id: int, request: Request,
+@router.post('/form/{article_id}/')
+async def post_form(article_id: int, request: Request,
+                    curation_id: Optional[int],
                     citation: Optional[str] = Form(''),
                     summary: Optional[str] = Form(''),
                     files: Optional[str] = Form(''),
@@ -181,7 +183,7 @@ async def post_form(article_id: int, curation_id: int, request: Request,
 
     try:
         fs_metadata = await figshare.get_readme_metadata(article_id,
-                                                         curation_id,
+                                                         curation_id=curation_id,
                                                          stage=stage)
     except HTTPException:
         return templates.TemplateResponse('404.html',
