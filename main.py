@@ -52,7 +52,7 @@ def configure_api():
 
         figshare_stage_api_key = settings.get('figshare_stage_api_key')
     else:
-        print("FIGSHARE_API_KEY set as ENV variable")
+        print("FIGSHARE_STAGE_API_KEY set as ENV variable")
 
     figshare.api_key = figshare_api_key
     figshare.stage_api_key = figshare_stage_api_key
