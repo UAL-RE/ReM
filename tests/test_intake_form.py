@@ -76,7 +76,7 @@ def test_get_data():
     assert response.status_code == 404
     content = ast.literal_eval(response.content.decode())
     assert isinstance(content, dict)
-    assert content['detail'] == "Record not found"
+    assert "Record not found" in content['detail']
 
 
 def test_add_data():
