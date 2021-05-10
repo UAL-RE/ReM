@@ -90,18 +90,20 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
         if curation_response.status_code != 200:
             raise HTTPException(
                 status_code=curation_response.status_code,
-                detail=curation_response.json(),
+                detail=f"Figshare: {curation_response.json()}",
             )
         else:
             curation_json = curation_response.json()
             if len(curation_json) != 0:
-                print(f"Retrieved pending curation_id for {article_id}: "
-                      f"{curation_json[0]['id']}")
+                print(f"Retrieved curation_id for {article_id}: "
+                      f"{curation_json[0]['id']} "
+                      f"(status={curation_json[0]['status']})")
                 curation_id = curation_json[0]['id']
             else:
+                review_msg = "reviews" if allow_approved else "pending review"
                 raise HTTPException(
                     status_code=404,
-                    detail=f'No valid {"pending" if allow_approved else ""} review for {article_id}'
+                    detail=f'FastAPI: No valid {review_msg} for {article_id}'
                 )
 
     if curation_id is not None:
@@ -121,7 +123,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
                 else:
                     raise HTTPException(
                         status_code=404,
-                        detail=f'No valid pending review for {article_id}'
+                        detail=f'FastAPI: No valid pending review for {article_id}'
                     )
             else:
                 return r_json

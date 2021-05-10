@@ -71,7 +71,7 @@ async def get_data(article_id: int, index: bool = False,
     if len(match) == 0:
         raise HTTPException(
             status_code=404,
-            detail="Record not found",
+            detail="FastAPI: Record not found",
         )
 
     if not index:
