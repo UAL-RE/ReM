@@ -90,7 +90,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
         if curation_response.status_code != 200:
             raise HTTPException(
                 status_code=curation_response.status_code,
-                detail=f"Figshare: {curation_response.json()}",
+                detail=f"Figshare: {curation_response.json()['message']}",
             )
         else:
             curation_json = curation_response.json()
@@ -100,11 +100,20 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
                       f"(status={curation_json[0]['status']})")
                 curation_id = curation_json[0]['id']
             else:
-                review_msg = "reviews" if allow_approved else "pending review"
-                raise HTTPException(
-                    status_code=404,
-                    detail=f'FastAPI: No valid {review_msg} for {article_id}'
-                )
+                art_response = requests.get(
+                    f"{base_url}/v2/articles/{article_id}",
+                    headers=headers)
+                if art_response.status_code != 200:
+                    raise HTTPException(
+                        status_code=art_response.status_code,
+                        detail=f"Figshare: {art_response.json()['message']}"
+                    )
+                else:
+                    review_msg = "reviews" if allow_approved else "pending review"
+                    raise HTTPException(
+                        status_code=401,
+                        detail=f"FastAPI: No valid {review_msg} for {article_id}"
+                    )
 
     if curation_id is not None:
         url = f"{curation_url}/{curation_id}"
@@ -122,7 +131,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
                     return r_json
                 else:
                     raise HTTPException(
-                        status_code=404,
+                        status_code=401,
                         detail=f'FastAPI: No valid pending review for {article_id}'
                     )
             else:

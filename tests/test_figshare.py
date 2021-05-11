@@ -53,7 +53,7 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
     assert isinstance(response.json(), dict)
 
     # This is published, so no pending expected
-    for approved, s_code in zip([False, True], [404, 200]):
+    for approved, s_code in zip([False, True], [401, 200]):
         response = _client_get(article_id, allow_approved=approved)
         assert response.status_code == s_code  # This is from FastAPI
         assert isinstance(response.json(), dict)
@@ -67,8 +67,8 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
         assert response.status_code == 400  # This is from figshare
 
         response = _client_get(i)
-        # Figshare API gives wrong responses, 404 is returned when 200 with empty json
-        assert response.status_code == (400 if i == -1 else 404)  # figshare=400, FastAPI=404
+        # Figshare curation API gives wrong responses. figshare module corrects this
+        assert response.status_code == 400  # This is from figshare
 
     response = _client_get()
     assert response.status_code == 404  # This is from FastAPI
@@ -100,8 +100,8 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
         assert response.status_code == 400  # This is from figshare
 
         response = _client_get(i)
-        # Figshare API gives wrong responses, 404 is returned when 200 with empty json
-        assert response.status_code == (400 if i == -1 else 404)  # figshare=400, FastAPI=404
+        # Figshare curation API gives wrong responses. figshare module corrects this
+        assert response.status_code == 400
 
     response = _client_get(stage=True)
     assert response.status_code == 404  # This is from FastAPI
