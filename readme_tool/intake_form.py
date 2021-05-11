@@ -34,6 +34,17 @@ class VersionModel(BaseModel):
     rem_web_api_version: str = api_version
 
 
+async def jinja_400s(status_code: int) -> dict:
+    if status_code == 404:
+        return {'msg': "Sorry, but you've encountered an 404 error!"}
+    if status_code == 401:
+        return {'msg': """Your dataset was published!<br>
+        As such, you can not fill out your README form for this specific version.<br>
+        If you recently made revisions for a new version, you might have not click the
+        submit/publish button.<br><br>
+        After you submit it for curatorial review, you can then revise your README form responses."""}
+
+
 @router.get('/version/')
 async def get_version() -> VersionModel:
     """Retrieve version metadata"""
@@ -149,9 +160,12 @@ async def get_form(article_id: int, request: Request,
             figshare.get_readme_metadata(article_id, curation_id=curation_id,
                                          stage=stage,
                                          allow_approved=allow_approved)
-    except HTTPException:
+    except HTTPException as err:
+        print(err.status_code)
+        msg = await jinja_400s(err.status_code)
         return templates.TemplateResponse('404.html',
-                                          context={'request': request})
+                                          context={'request': request,
+                                                   'err': msg})
 
     try:
         submit_dict = await get_data(article_id, db_file=db_file)
@@ -204,9 +218,11 @@ async def post_form(article_id: int, request: Request,
             figshare.get_readme_metadata(article_id, curation_id=curation_id,
                                          stage=stage,
                                          allow_approved=allow_approved)
-    except HTTPException:
+    except HTTPException as err:
+        msg = await jinja_400s(err.status_code)
         return templates.TemplateResponse('404.html',
-                                          context={'request': request})
+                                          context={'request': request,
+                                                   'err': msg})
 
     result = {
         'citation': citation,

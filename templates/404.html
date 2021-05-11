@@ -5,7 +5,11 @@
     <title>Page Not found</title>
 </head>
 
+
 <body>
-404 - Page Not Found
+<center>
+    <img src="{{ url_for('templates', path='img/ReDATA_logo.png') }}" height="50px" style="padding-top: 20px;" \>
+    <h3 style="color:#AB0520;">{{ err.msg | safe }}</h3>
+</center>
 </body>
 </html>
