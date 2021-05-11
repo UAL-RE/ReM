@@ -54,20 +54,32 @@ async def get_db(db_file: str = tinydb_file) -> TinyDB:
 
 
 @router.get('/database/read/{article_id}')
-async def get_data(article_id: int, index: bool = False,
-                   db_file: str = tinydb_file) -> Union[dict, int]:
+async def get_data(article_id: int, curation_id: Optional[int] = None,
+                   index: bool = False, db_file: str = tinydb_file)\
+        -> Union[dict, int]:
     """Retrieve record from TinyDB README database
 
     \f
     :param article_id: Figshare article ID
+    :param curation_id: Figshare curation ID
     :param index: Indicate whether to return ``doc_id`` (True) or record (False).
     :param db_file: JSON filename for TinyDB database
 
     :return: TinyDB record or ``doc_id``
     """
     db0 = await get_db(db_file=db_file)
-    article_query = q['article_id'] == article_id
+    if curation_id is None:
+        article_query = q['article_id'] == article_id
+    else:
+        article_query = (q['article_id'] == article_id) & \
+                        (q['curation_id'] == curation_id)
+
     match = db0.search(article_query)
+    if curation_id is not None and len(match) == 0:
+        print(f"Performing article_id only search: {article_id}")
+        article_query = q['article_id'] == article_id
+        match = db0.search(article_query)
+
     if len(match) == 0:
         raise HTTPException(
             status_code=404,
