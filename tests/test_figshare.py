@@ -41,70 +41,57 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
 
     # Production
     ############
-    response = _client_get(article_id, curation_id0=curation_id)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-    assert response.json()['article_id'] == article_id
-    assert response.json()['id'] == curation_id
-
-    # Check when curation_id is not specified
-    response = _client_get(article_id)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-
-    # This is published, so no pending expected
-    for approved, s_code in zip([False, True], [401, 200]):
-        response = _client_get(article_id, allow_approved=approved)
-        assert response.status_code == s_code  # This is from FastAPI
-        assert isinstance(response.json(), dict)
+    for c_list in [None, curation_id]:  # Checks with/without curation_id
+        # Checks for both pending/approved cases
+        for approved, s_code in zip([False, True], [401, 200]):
+            response = _client_get(article_id,
+                                   curation_id0=c_list,
+                                   allow_approved=approved)
+            assert response.status_code == s_code  # This is from FastAPI
+            assert isinstance(response.json(), dict)
+            if s_code == 200:
+                assert response.json()['article_id'] == article_id
+                if c_list is not None:
+                    assert response.json()['id'] == curation_id
 
     # Check for incorrect entries with prod endpoint
     response = _client_get(stage_article_id)
     assert response.status_code == 404  # This is from figshare
 
-    for i in value_400:
-        response = _client_get(i, curation_id0=i)
-        assert response.status_code == 400  # This is from figshare
-
-        response = _client_get(i)
-        # Figshare curation API gives wrong responses. figshare module corrects this
-        assert response.status_code == 400  # This is from figshare
-
+    # Check for lack of article_id input
     response = _client_get()
     assert response.status_code == 404  # This is from FastAPI
 
+    for i in value_400:
+        for c_list in [None, i]:  # Checks with/without curation_id
+            response = _client_get(i, curation_id0=c_list)
+            assert response.status_code == 400  # This is from figshare
+
     # Stage
     #######
-    response = _client_get(stage_article_id, curation_id0=stage_curation_id,
-                           stage=True)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-    assert response.json()['article_id'] == stage_article_id
-    assert response.json()['id'] == stage_curation_id
-
-    # Check for pending deposit on stage
-    response = _client_get(stage_article_underreview_id,
-                           curation_id0=stage_curation_underreview_id,
-                           stage=True, allow_approved=False)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-    assert response.json()['article_id'] == stage_article_underreview_id
-    assert response.json()['id'] == stage_curation_underreview_id
+    # Check for approved and under review data
+    a_list = [stage_article_id, stage_article_underreview_id]
+    c_list = [stage_curation_id, stage_curation_underreview_id]
+    allow_list = [True, False]
+    for a_id, c_id, allow in zip(a_list, c_list, allow_list):
+        response = _client_get(a_id, curation_id0=c_id,
+                               stage=True, allow_approved=allow)
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json()['article_id'] == a_id
+        assert response.json()['id'] == c_id
 
     # Check for incorrect entries with stage endpoint
     response = _client_get(article_id, curation_id0=curation_id, stage=True)
     assert response.status_code == 404  # This is from figshare
 
-    for i in value_400:
-        response = _client_get(i, curation_id0=i, stage=True)
-        assert response.status_code == 400  # This is from figshare
-
-        response = _client_get(i)
-        # Figshare curation API gives wrong responses. figshare module corrects this
-        assert response.status_code == 400
-
     response = _client_get(stage=True)
     assert response.status_code == 404  # This is from FastAPI
+
+    for i in value_400:
+        for c_list in [None, i]:  # Checks with/without curation_id
+            response = _client_get(i, curation_id0=c_list, stage=True)
+            assert response.status_code == 400  # This is from figshare
 
 
 def test_metadata_get(figshare_api_key, figshare_stage_api_key):
@@ -128,6 +115,7 @@ def test_metadata_get(figshare_api_key, figshare_stage_api_key):
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == article_id
+    assert response.json()['curation_id'] == curation_id
 
     # Check for incorrect entries with prod endpoint
     response = _client_get(stage_article_id)
@@ -142,11 +130,13 @@ def test_metadata_get(figshare_api_key, figshare_stage_api_key):
 
     # Stage
     #######
-    response = _client_get(stage_article_id, curation_id0=stage_curation_id,
+    response = _client_get(stage_article_id,
+                           curation_id0=stage_curation_id,
                            stage=True)
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert response.json()['article_id'] == stage_article_id
+    assert response.json()['curation_id'] == stage_curation_id
 
     # Check for incorrect entries with stage endpoint
     response = _client_get(article_id, curation_id0=curation_id,
