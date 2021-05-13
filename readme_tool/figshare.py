@@ -60,6 +60,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
     :param stage: Figshare stage or production API.
                   Stage is available for Figshare institutions
     :param allow_approved: Return 200 responses even if curation is not pending
+
     :return: Figshare API response
     """
 
