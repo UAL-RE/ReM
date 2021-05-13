@@ -35,6 +35,12 @@ class VersionModel(BaseModel):
 
 
 async def jinja_400s(status_code: int) -> dict:
+    """
+    Return dict of 401/404 eror
+    :param status_code: HTTP status code. Either 401 (FastAPI) or 404 (Figshare)
+
+    :return:
+    """
     if status_code == 404:
         return {'msg': "Sorry, but you've encountered an 404 error!"}
     if status_code == 401:
