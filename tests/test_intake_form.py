@@ -5,19 +5,26 @@ from starlette.staticfiles import StaticFiles
 from fastapi.testclient import TestClient
 from fastapi import FastAPI
 
-from readme_tool.intake_form import VersionModel, router
+from readme_tool import intake_form
+from readme_tool import figshare
 
 app = FastAPI()
 app.mount("/templates", StaticFiles(directory="templates"), name="templates")
-app.include_router(router)
+app.include_router(intake_form.router)
 client = TestClient(app)
 
+# Production test (published)
 article_id = 12966581
+curation_id = 540005
+curation_id_old = 549476
+
 doc_id = 1
 new_article_id = 87654321
 new_article_id2 = 12026436  # This is for addition testing
+new_curation_id2 = 478617
 
 article_id_404 = 12345678
+curation_id_404 = 123456
 
 value_400 = [-1, 0]
 
@@ -31,7 +38,7 @@ def test_get_version():
     assert response.status_code == 200
     json_content = response.json()
     assert isinstance(json_content, dict)
-    for key in VersionModel().dict():
+    for key in intake_form.VersionModel().dict():
         assert isinstance(json_content[key], str)
 
 
@@ -45,23 +52,17 @@ def test_get_db():
 def test_get_data():
     url = f'/database/read'
 
-    # Check for default data
-    response = client.get(
-        f'{url}/{article_id}?db_file={test_dup_file}'
-    )
-    assert response.status_code == 200
-    content = response.content
-    assert isinstance(content, bytes)
-    assert isinstance(ast.literal_eval(content.decode('UTF-8')), dict)
-
-    # Check that index is returned
-    response = client.get(
-        f'{url}/{article_id}?db_file={test_dup_file}&index=True'
-    )
-    assert response.status_code == 200
-    content = response.content
-    assert isinstance(content, bytes)
-    assert isinstance(ast.literal_eval(content.decode('UTF-8')), int)
+    # Check for default data, and index is returned
+    for index_val, dtype in zip([False, True], [dict, int]):
+        for c_id in [None, curation_id, curation_id_old]:
+            params = {'curation_id': c_id,
+                      'db_file': test_dup_file,
+                      'index': index_val}
+            response = client.get(f'{url}/{article_id}', params=params)
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(ast.literal_eval(content.decode('UTF-8')), dtype)
 
     # Check for not available data
     response = client.get(
@@ -70,7 +71,7 @@ def test_get_data():
     assert response.status_code == 404
     content = ast.literal_eval(response.content.decode())
     assert isinstance(content, dict)
-    assert content['detail'] == "Record not found"
+    assert "Record not found" in content['detail']
 
 
 def test_add_data():
@@ -106,25 +107,53 @@ def test_update_data():
     assert response.status_code == 200
 
 
-def test_read_form():
+def test_read_form(figshare_api_key, figshare_stage_api_key):
     # Test for existing data (article_id), non-existing data (new_article_id2)
-    for a_id in [article_id, new_article_id2]:
-        url = f'/form/{a_id}?db_file={test_dup_file}'
-        response = client.get(url)
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(content.decode(), str)
-        assert 'html' in content.decode()
+
+    figshare.api_key = figshare_api_key
+    figshare.stage_api_key = figshare_stage_api_key
+
+    a_list = [article_id, new_article_id2]
+    c_list = [curation_id, new_curation_id2]
+
+    # Returns form page (allowed=True) and 401 page (allowed=False)
+    for allow in [True, False]:
+        for a_id, c_id in zip(a_list, c_list):
+            params = {
+                'curation_id': c_id,
+                'allow_approved': allow,
+                'db_file': test_dup_file
+            }
+            url = f'/form/{a_id}/'
+            response = client.get(url, params=params)
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(content.decode(), str)
+            assert 'html' in content.decode()
+            if not allow:
+                assert 'Your dataset was published' in content.decode()
 
     # 404 check
-    url = f'/form/{article_id_404}?db_file={test_dup_file}'
-    response = client.get(url)
+    params = {
+        'curation_id': curation_id_404,
+        'allow_approved': True,
+        'db_file': test_dup_file
+    }
+    url = f'/form/{article_id_404}/'
+    response = client.get(url, params=params)
     content = response.content
-    assert '404' in content.decode()
+    assert '404' in content.decode()  # From FastAPI
 
 
-def test_intake_post():
+def test_intake_post(figshare_api_key, figshare_stage_api_key):
+
+    figshare.api_key = figshare_api_key
+    figshare.stage_api_key = figshare_stage_api_key
+
+    a_list = [article_id, new_article_id2]
+    c_list = [curation_id, new_curation_id2]
+
     post_data = {
         'summary': 'Summary data for add (extended)',
         'citation': 'Preferred citation data for add (extended)',
@@ -134,18 +163,31 @@ def test_intake_post():
         'notes': 'Additional notes for add (extended)',
     }
 
-    for a_id in [article_id, new_article_id2]:
-        url = f'/form/{a_id}?db_file={test_dup_file}'
+    for allow in [True, False]:
+        for a_id, c_id in zip(a_list, c_list):
+            params = {
+                'curation_id': c_id,
+                'allow_approved': allow,
+                'db_file': test_dup_file
+            }
+            url = f'/form/{a_id}/'
 
-        response = client.post(url, data=post_data)  # Use data for Form data
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(content.decode(), str)
-        assert 'html' in content.decode()
+            response = client.post(url, data=post_data, params=params)  # Use data for Form data
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(content.decode(), str)
+            assert 'html' in content.decode()
+            if not allow:
+                assert 'Your dataset was published' in content.decode()
 
     # 404 check
-    url = f'/form/{article_id_404}?db_file={test_dup_file}'
-    response = client.post(url, data=post_data)
+    params = {
+        'curation_id': curation_id_404,
+        'allow_approved': True,
+        'db_file': test_dup_file
+    }
+    url = f'/form/{article_id_404}/'
+    response = client.post(url, data=post_data, params=params)
     content = response.content
-    assert '404' in content.decode()
+    assert '404' in content.decode()  # From FastAPI
