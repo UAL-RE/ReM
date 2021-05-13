@@ -42,7 +42,8 @@ async def jinja_400s(status_code: int) -> dict:
     :return:
     """
     if status_code == 404:
-        return {'msg': "Sorry, but you've encountered an 404 error!"}
+        return {'msg': """Sorry, but you've encountered an 404 error!<br><br>
+        Please contact a ReDATA administrator at data-management at arizona.edu."""}
     if status_code == 401:
         return {'msg': """Your dataset was published!<br>
         As such, you can not fill out your README form for this specific version.<br>
