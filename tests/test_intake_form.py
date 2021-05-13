@@ -52,23 +52,17 @@ def test_get_db():
 def test_get_data():
     url = f'/database/read'
 
-    for c_id in [None, curation_id, curation_id_old]:
-        # Check for default data
-        params = {'curation_id': c_id,
-                  'db_file': test_dup_file}
-        response = client.get(f'{url}/{article_id}', params=params)
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(ast.literal_eval(content.decode('UTF-8')), dict)
-
-        # Check that index is returned
-        params['index'] = True
-        response = client.get(f'{url}/{article_id}', params=params)
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(ast.literal_eval(content.decode('UTF-8')), int)
+    # Check for default data, and index is returned
+    for index_val, dtype in zip([False, True], [dict, int]):
+        for c_id in [None, curation_id, curation_id_old]:
+            params = {'curation_id': c_id,
+                      'db_file': test_dup_file,
+                      'index': index_val}
+            response = client.get(f'{url}/{article_id}', params=params)
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(ast.literal_eval(content.decode('UTF-8')), dtype)
 
     # Check for not available data
     response = client.get(
