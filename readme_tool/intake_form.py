@@ -161,7 +161,6 @@ async def get_form(article_id: int, request: Request,
                                          stage=stage,
                                          allow_approved=allow_approved)
     except HTTPException as err:
-        print(err.status_code)
         msg = await jinja_400s(err.status_code)
         return templates.TemplateResponse('404.html',
                                           context={'request': request,
@@ -182,7 +181,7 @@ async def get_form(article_id: int, request: Request,
 
 @router.post('/form/{article_id}/')
 async def post_form(article_id: int, request: Request,
-                    curation_id: Optional[int],
+                    curation_id: Optional[int] = None,
                     citation: Optional[str] = Form(''),
                     summary: Optional[str] = Form(''),
                     files: Optional[str] = Form(''),
