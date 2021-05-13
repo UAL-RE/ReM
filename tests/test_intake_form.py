@@ -116,19 +116,23 @@ def test_read_form(figshare_api_key, figshare_stage_api_key):
     a_list = [article_id, new_article_id2]
     c_list = [curation_id, new_curation_id2]
 
-    for a_id, c_id in zip(a_list, c_list):
-        params = {
-            'curation_id': c_id,
-            'allow_approved': True,
-            'db_file': test_dup_file
-        }
-        url = f'/form/{a_id}/'
-        response = client.get(url, params=params)
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(content.decode(), str)
-        assert 'html' in content.decode()
+    # Returns form page (allowed=True) and 401 page (allowed=False)
+    for allow in [True, False]:
+        for a_id, c_id in zip(a_list, c_list):
+            params = {
+                'curation_id': c_id,
+                'allow_approved': allow,
+                'db_file': test_dup_file
+            }
+            url = f'/form/{a_id}/'
+            response = client.get(url, params=params)
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(content.decode(), str)
+            assert 'html' in content.decode()
+            if not allow:
+                assert 'Your dataset was published' in content.decode()
 
     # 404 check
     params = {
