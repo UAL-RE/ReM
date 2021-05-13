@@ -163,20 +163,23 @@ def test_intake_post(figshare_api_key, figshare_stage_api_key):
         'notes': 'Additional notes for add (extended)',
     }
 
-    for a_id, c_id in zip(a_list, c_list):
-        params = {
-            'curation_id': c_id,
-            'allow_approved': True,
-            'db_file': test_dup_file
-        }
-        url = f'/form/{a_id}/'
+    for allow in [True, False]:
+        for a_id, c_id in zip(a_list, c_list):
+            params = {
+                'curation_id': c_id,
+                'allow_approved': allow,
+                'db_file': test_dup_file
+            }
+            url = f'/form/{a_id}/'
 
-        response = client.post(url, data=post_data, params=params)  # Use data for Form data
-        assert response.status_code == 200
-        content = response.content
-        assert isinstance(content, bytes)
-        assert isinstance(content.decode(), str)
-        assert 'html' in content.decode()
+            response = client.post(url, data=post_data, params=params)  # Use data for Form data
+            assert response.status_code == 200
+            content = response.content
+            assert isinstance(content, bytes)
+            assert isinstance(content.decode(), str)
+            assert 'html' in content.decode()
+            if not allow:
+                assert 'Your dataset was published' in content.decode()
 
     # 404 check
     params = {
