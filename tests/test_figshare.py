@@ -24,6 +24,14 @@ value_400 = [-1, 0]
 
 
 def test_figshare_get(figshare_api_key, figshare_stage_api_key):
+    main_test(figshare_api_key, figshare_stage_api_key, 'figshare')
+
+
+def test_metadata_get(figshare_api_key, figshare_stage_api_key):
+    main_test(figshare_api_key, figshare_stage_api_key, 'metadata')
+
+
+def main_test(figshare_api_key, figshare_stage_api_key, endpoint):
     def _client_get(article_id0: Union[int, str] = '',
                     curation_id0: Union[int] = None,
                     stage: bool = False,
@@ -34,7 +42,13 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
             'stage': stage,
             'allow_approved': allow_approved
         }
-        return client.get(f'/figshare/{article_id0}', params=params)
+        return client.get(f'/{endpoint}/{article_id0}', params=params)
+
+    curation_key = ''
+    if endpoint == 'figshare':
+        curation_key = 'id'
+    if endpoint == 'metadata':
+        curation_key = 'curation_id'
 
     figshare.api_key = figshare_api_key
     figshare.stage_api_key = figshare_stage_api_key
@@ -51,8 +65,8 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
             assert isinstance(response.json(), dict)
             if s_code == 200:
                 assert response.json()['article_id'] == article_id
-                if c_list is not None:
-                    assert response.json()['id'] == curation_id
+                if c_list is not None and not curation_key:
+                    assert response.json()[curation_key] == curation_id
 
     # Check for incorrect entries with prod endpoint
     response = _client_get(stage_article_id)
@@ -79,7 +93,7 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
         assert response.json()['article_id'] == a_id
-        assert response.json()['id'] == c_id
+        assert response.json()[curation_key] == c_id
 
     # Check for incorrect entries with stage endpoint
     response = _client_get(article_id, curation_id0=curation_id, stage=True)
@@ -92,60 +106,3 @@ def test_figshare_get(figshare_api_key, figshare_stage_api_key):
         for c_list in [None, i]:  # Checks with/without curation_id
             response = _client_get(i, curation_id0=c_list, stage=True)
             assert response.status_code == 400  # This is from figshare
-
-
-def test_metadata_get(figshare_api_key, figshare_stage_api_key):
-    def _client_get(article_id0: Union[int, str] = '',
-                    curation_id0: Union[int, str] = None,
-                    stage: bool = False,
-                    allow_approved: bool = True):
-        params = {
-            'curation_id': curation_id0,
-            'stage': stage,
-            'allow_approved': allow_approved
-        }
-        return client.get(f'/metadata/{article_id0}', params=params)
-
-    figshare.api_key = figshare_api_key
-    figshare.stage_api_key = figshare_stage_api_key
-
-    # Production
-    ############
-    response = _client_get(article_id, curation_id0=curation_id)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-    assert response.json()['article_id'] == article_id
-    assert response.json()['curation_id'] == curation_id
-
-    # Check for incorrect entries with prod endpoint
-    response = _client_get(stage_article_id)
-    assert response.status_code == 404
-
-    for i in value_400:
-        response = _client_get(i, curation_id0=i)
-        assert response.status_code == 400
-
-    response = _client_get()
-    assert response.status_code == 404
-
-    # Stage
-    #######
-    response = _client_get(stage_article_id,
-                           curation_id0=stage_curation_id,
-                           stage=True)
-    assert response.status_code == 200
-    assert isinstance(response.json(), dict)
-    assert response.json()['article_id'] == stage_article_id
-    assert response.json()['curation_id'] == stage_curation_id
-
-    # Check for incorrect entries with stage endpoint
-    response = _client_get(article_id, curation_id0=curation_id,
-                           stage=True)
-    assert response.status_code == 404
-
-    for i in value_400:
-        response = _client_get(i, curation_id0=i, stage=True)
-        assert response.status_code == 400
-
-    response = _client_get(stage=True)
-    assert response.status_code == 404
