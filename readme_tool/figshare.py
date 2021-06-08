@@ -1,6 +1,8 @@
 from typing import Union, Optional
 import requests
 
+from ldcoolp_figshare import FigshareInstituteAdmin
+
 from fastapi import APIRouter, HTTPException
 
 router = APIRouter()
@@ -74,20 +76,17 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
         'Authorization': f'token {api_key if not stage else stage_api_key}'
     }
 
-    curation_url = f"{base_url}/v2/account/institution/review"
+    fs_admin = FigshareInstituteAdmin(token=api_key if not stage else stage_api_key,
+                                      stage=stage)
 
     if curation_id is None:
-        url = f"{base_url}/v2/account/institution/reviews"
-        params = {
-            'offset': 0,
-            'limit': 1000,
-            'article_id': article_id
-        }
-
+        status = ''
         if not allow_approved:
-            params['status'] = 'pending'
+            status = 'pending'
 
-        curation_response = requests.get(url, headers=headers, params=params)
+        curation_response = \
+            fs_admin.get_curation_list(article_id, status=status,
+                                       process=False)
         if curation_response.status_code != 200:
             raise HTTPException(
                 status_code=curation_response.status_code,
@@ -117,9 +116,7 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
                     )
 
     if curation_id is not None:
-        url = f"{curation_url}/{curation_id}"
-
-        response = requests.get(url, headers=headers)
+        response = fs_admin.get_curation_details(curation_id, process=False)
         if response.status_code != 200:
             raise HTTPException(
                 status_code=response.status_code,
