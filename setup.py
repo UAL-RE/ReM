@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fr:
 
 setup(
     name='ReDATA_README_Tool',
-    version='0.3.0',
+    version='0.3.1',
     packages=['readme_tool'],
     url='https://github.com/UAL-ODIS/ReDATA_README_Tool',
     license='MIT License',
