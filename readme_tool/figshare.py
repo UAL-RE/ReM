@@ -71,13 +71,13 @@ def get_figshare(article_id: int, curation_id: Optional[int] = None,
     else:
         base_url = "https://api.figsh.com"
 
+    token = api_key if not stage else stage_api_key
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'token {api_key if not stage else stage_api_key}'
+        'Authorization': f'token {token}'
     }
 
-    fs_admin = FigshareInstituteAdmin(token=api_key if not stage else stage_api_key,
-                                      stage=stage)
+    fs_admin = FigshareInstituteAdmin(token=token, stage=stage)
 
     if curation_id is None:
         status = ''
