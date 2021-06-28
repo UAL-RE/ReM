@@ -10,7 +10,7 @@ setup(
     name='ReDATA_README_Tool',
     version='0.3.1',
     packages=['readme_tool'],
-    url='https://github.com/UAL-ODIS/ReDATA_README_Tool',
+    url='https://github.com/UAL-RE/ReDATA_README_Tool',
     license='MIT License',
     author='Chun Ly',
     author_email='astro.chun@gmail.com',
