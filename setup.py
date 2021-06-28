@@ -7,10 +7,10 @@ with open("requirements.txt", "r") as fr:
     requirements = fr.read().splitlines()
 
 setup(
-    name='ReDATA_README_Tool',
+    name='ReM',
     version='0.3.1',
     packages=['readme_tool'],
-    url='https://github.com/UAL-RE/ReDATA_README_Tool',
+    url='https://github.com/UAL-RE/ReM',
     license='MIT License',
     author='Chun Ly',
     author_email='astro.chun@gmail.com',
